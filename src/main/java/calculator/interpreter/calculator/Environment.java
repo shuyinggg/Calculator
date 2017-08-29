@@ -23,14 +23,20 @@ import java.io.PrintStream;
 public class Environment {
     private IDictionary<String, AstNode> variables;
     private PrintStream output;
+    private IDictionary<String, SpecialFunctionHandler> customFunctions;
     private IDictionary<String, SpecialFunctionHandler> specialFunctions;
+    private Interpreter interpreter;
 
     public Environment(IDictionary<String, AstNode> variables,
                        PrintStream output,
-                       IDictionary<String, SpecialFunctionHandler> specialFunctions) {
+                       IDictionary<String, SpecialFunctionHandler> customFunctions,
+                       IDictionary<String, SpecialFunctionHandler> specialFunctions,
+                       Interpreter interpreter) {
         this.variables = variables;
         this.output = output;
+        this.customFunctions = customFunctions;
         this.specialFunctions = specialFunctions;
+        this.interpreter = interpreter;
     }
 
     /**
@@ -49,10 +55,31 @@ public class Environment {
     }
 
     /**
-     * Returns all functions that require special handling/have a custom
-     * "definition" in the interpreter
+     * Returns all custom functions that manipulate an expression in some way.
+     *
+     * You should ignore this method.
+     */
+    public IDictionary<String, SpecialFunctionHandler> getCustomFunctions() {
+        return this.customFunctions;
+    }
+
+    /**
+     * Returns all functions that manipulate the flow of execution in a special way
+     * somehow.
+     *
+     * You should ignore this method.
      */
     public IDictionary<String, SpecialFunctionHandler> getSpecialFunctions() {
         return this.specialFunctions;
+    }
+
+    /**
+     * Returns the interpreter that is currently executing the AST.
+     *
+     * You should ignore this method, unless you are working on the
+     * extra credit and are trying to add control flow to our calculator.
+     */
+    public Interpreter getInterpreter() {
+        return this.interpreter;
     }
 }

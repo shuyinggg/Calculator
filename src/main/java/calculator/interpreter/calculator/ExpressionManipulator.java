@@ -71,6 +71,12 @@ public class ExpressionManipulator {
 
     public static AstNode simplify(Environment env, AstNode node) {
         // Try writing this one on your own!
+        // Hint 1: Your code will likely be structured roughly similarly
+        //         to your "toDouble" method
+        // Hint 2: When you're implementing constant folding, you may want
+        //         to call your "toDouble" method in some way
+
+        // TODO: Your code here
         throw new NotYetImplementedException();
     }
 

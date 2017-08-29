@@ -1,21 +1,39 @@
 package calculator.interpreter.calculator;
 
 import calculator.interpreter.AstNode;
-import datastructures.concrete.DoubleLinkedList;
+import calculator.interpreter.EvaluationError;
 import datastructures.interfaces.IList;
 
 public class Builtins {
-    public static AstNode handleSimplifyWrapper(Environment env, AstNode wrapper) {
-        assertSignatureOk("$simplify", 1, wrapper);
-        return ExpressionManipulator.simplify(env, wrapper.getChildren().get(0));
-    }
-
     public static AstNode handleBlock(Environment env, AstNode wrapper) {
         assertSignatureOk("block", wrapper);
-        AstNode out;
+        AstNode out = new AstNode(1);
         for (AstNode child : wrapper.getChildren()) {
-
+            out = env.getInterpreter().evaluate(env, child);
         }
+        // Return value is same as last item in block
+        return out;
+    }
+
+    public static AstNode handleAssign(Environment env, AstNode wrapper) {
+        assertSignatureOk("assign", 2, wrapper);
+        Interpreter interp = env.getInterpreter();
+        IList<AstNode> children = wrapper.getChildren();
+
+        // Parse children
+        AstNode var = children.get(0).getChildren().get(0);  // Unnest 'simplify'
+        AstNode expr = interp.evaluate(env, children.get(1));
+
+        // Some sanity checking
+        if (!var.isVariable()) {
+            throw new EvaluationError(String.format(
+                    "LHS of assignment must be a variable. Encountered %s instead.",
+                    var.isNumber() ? var.getNumericValue() : var.getName()));
+        }
+
+        // Record and return result
+        env.getVariables().put(var.getName(), expr);
+        return expr;
     }
 
     private static void assertSignatureOk(String name, int numChildren, AstNode node) {
@@ -28,7 +46,7 @@ public class Builtins {
                     name,
                     numChildren);
 
-            throw new IllegalArgumentException(msg);
+            throw new EvaluationError(msg);
         }
     }
 
@@ -40,7 +58,7 @@ public class Builtins {
                     node.getName(),
                     name);
 
-            throw new IllegalArgumentException(msg);
+            throw new EvaluationError(msg);
         }
     }
 }
