@@ -1,5 +1,6 @@
 package calculator.interpreter.calculator;
 
+import calculator.gui.ImageDrawer;
 import calculator.interpreter.AstNode;
 import datastructures.interfaces.IDictionary;
 
@@ -15,7 +16,7 @@ import java.io.PrintStream;
  * You should only need to use the following methods:
  *
  * - getVariables()
- * - getPlot()
+ * - getImageDrawer()
  *
  * You can ignore all other methods -- they're used internally by
  * the code you were provided.
@@ -23,17 +24,20 @@ import java.io.PrintStream;
 public class Environment {
     private IDictionary<String, AstNode> variables;
     private PrintStream output;
+    private ImageDrawer imageDrawer;
     private IDictionary<String, SpecialFunctionHandler> customFunctions;
     private IDictionary<String, SpecialFunctionHandler> specialFunctions;
     private Interpreter interpreter;
 
     public Environment(IDictionary<String, AstNode> variables,
                        PrintStream output,
+                       ImageDrawer imageDrawer,
                        IDictionary<String, SpecialFunctionHandler> customFunctions,
                        IDictionary<String, SpecialFunctionHandler> specialFunctions,
                        Interpreter interpreter) {
         this.variables = variables;
         this.output = output;
+        this.imageDrawer = imageDrawer;
         this.customFunctions = customFunctions;
         this.specialFunctions = specialFunctions;
         this.interpreter = interpreter;
@@ -47,8 +51,25 @@ public class Environment {
     }
 
     /**
+     * Returns a class that contains a variety of useful methods for
+     * drawing and plotting data.
+     *
+     * If the Calculator object is running outside of the GUI, this
+     * method returns null.
+     *
+     * Implementation note: you may assume this method always returns
+     * an actual ImageDrawer object when you're running your calculator
+     * app, but will always return 'null' in your tests.
+     */
+    public ImageDrawer getImageDrawer() {
+        return this.imageDrawer;
+    }
+
+    /**
      * A printstream to the output -- lets us control where we print
-     * instead of having to always default to System.out
+     * instead of having to always default to System.out.
+     *
+     * You can ignore this method.
      */
     public PrintStream getOutputStream() {
         return this.output;

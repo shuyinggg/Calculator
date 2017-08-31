@@ -1,11 +1,11 @@
 package calculator.parser;
 
+import calculator.interpreter.AstNode;
 import calculator.parser.grammar.CalculatorGrammarBaseVisitor;
 import calculator.parser.grammar.CalculatorGrammarLexer;
 import calculator.parser.grammar.CalculatorGrammarParser;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IList;
-import calculator.interpreter.AstNode;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -73,8 +73,13 @@ public class Parser {
         }
 
         @Override
-        public AstNode visitNegExpr(CalculatorGrammarParser.NegExprContext ctx) {
+        public AstNode visitNegExprUnary(CalculatorGrammarParser.NegExprUnaryContext ctx) {
             return new AstNode("negate", this.asList(this.visit(ctx.expr)));
+        }
+
+        @Override
+        public AstNode visitNegExprSingle(CalculatorGrammarParser.NegExprSingleContext ctx) {
+            return this.visit(ctx.expr);
         }
 
         @Override
@@ -134,7 +139,7 @@ public class Parser {
 
         private IList<AstNode> parseArgList(CalculatorGrammarParser.ArglistContext args) {
             IList<AstNode> out = new DoubleLinkedList<>();
-            for (CalculatorGrammarParser.PowExprContext item : args.values) {
+            for (CalculatorGrammarParser.AddExprContext item : args.values) {
                 out.add(this.visit(item));
             }
             return out;

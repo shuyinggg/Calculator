@@ -1,7 +1,13 @@
 package calculator.gui;
 
+import calculator.interpreter.EvaluationError;
+import calculator.interpreter.calculator.Calculator;
+
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -23,17 +29,20 @@ public class MainWindow extends JFrame {
     private int width;
     private int drawingHeight;
     private int textRows;
+    private Calculator calculator;
 
     public MainWindow(String title, int width, int drawingHeight, int textRows) {
         this.title = title;
         this.width = width;
         this.drawingHeight = drawingHeight;
         this.textRows = textRows;
+        this.calculator = new Calculator();
     }
 
     public void construct() {
         this.setupMainWindow();
 
+        // Set up main pane
         JSplitPane mainPane = new JSplitPane(
                 JSplitPane.VERTICAL_SPLIT,
                 this.makeDrawingPane(),
@@ -41,6 +50,7 @@ public class MainWindow extends JFrame {
         mainPane.setDividerLocation(this.drawingHeight);
         this.add(mainPane);
 
+        // Finish setting up geometry
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -57,7 +67,7 @@ public class MainWindow extends JFrame {
         }
     }
 
-    public JComponent makeDrawingPane() {
+    public ImagePanel makeDrawingPane() {
         BufferedImage image = new BufferedImage(
                 this.width,
                 this.drawingHeight, BufferedImage.TYPE_BYTE_INDEXED);
@@ -67,7 +77,9 @@ public class MainWindow extends JFrame {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width + 1, this.drawingHeight + 1);
 
-        return new ImagePanel(image);
+        ImagePanel panel = new ImagePanel(image);
+        this.calculator.setImageDrawer(panel.getImageDrawer());
+        return panel;
     }
 
     public JComponent makeTextPane() {
@@ -86,7 +98,7 @@ public class MainWindow extends JFrame {
         // Add logic
         DisallowEditingPastContentFilter filter = new DisallowEditingPastContentFilter(4);
         ((AbstractDocument) textArea.getDocument()).setDocumentFilter(filter);
-        textArea.addKeyListener(new TextAreaResponder(this, textArea, filter));
+        textArea.addKeyListener(new TextAreaResponder(this, textArea, filter, this.calculator));
 
         // Add scroll pane
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -100,17 +112,23 @@ public class MainWindow extends JFrame {
         private JFrame frame;
         private JTextArea area;
         private DisallowEditingPastContentFilter filter;
+        private Calculator calculator;
 
-        public TextAreaResponder(JFrame frame, JTextArea area, DisallowEditingPastContentFilter filter) {
+        public TextAreaResponder(JFrame frame,
+                                 JTextArea area,
+                                 DisallowEditingPastContentFilter filter,
+                                 Calculator calculator) {
             this.frame = frame;
             this.area = area;
             this.filter = filter;
+            this.calculator = calculator;
         }
 
         @Override
         public void keyTyped(KeyEvent e) {
             try {
                 if (e.getKeyChar() == '\n') {
+                    // Get input
                     int lineno = this.area.getLineCount() - 2;
                     int start = this.area.getLineStartOffset(lineno);
                     int end = this.area.getLineEndOffset(lineno);
@@ -119,13 +137,25 @@ public class MainWindow extends JFrame {
                         enteredText = enteredText.substring(4);
                     }
 
+                    // Handle input
                     if (enteredText.equals("quit()\n")) {
                         this.frame.dispose();
+                        return;
+                    }
+
+                    String response;
+                    try {
+                        response = this.calculator.evaluate(enteredText);
+                    } catch (EvaluationError ex) {
+                        response = "ERROR: " + ex.getMessage();
+                    } catch (Exception ex) {
+                        this.frame.dispose();
+                        throw ex;
                     }
 
                     // Add response
                     this.filter.allowEditing();
-                    this.area.append("Testing!\n");
+                    this.area.append(response + "\n");
                     this.area.append(">>> ");
                     this.filter.disallowEditing();
 
@@ -133,7 +163,6 @@ public class MainWindow extends JFrame {
                     this.filter.setPromptPosition(newOffset);
                 }
             } catch (BadLocationException ex) {
-                System.err.println("!!!");
                 throw new RuntimeException(ex);
             }
         }

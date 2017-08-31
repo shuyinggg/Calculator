@@ -26,7 +26,7 @@ apply plugin: 'eclipse'
 // Apply the 'idea' plugin so we can generate IntelliJ project files
 apply plugin: 'idea'
 
-// TODO: document
+// Apply the 'antlr' plugin so we can generate a lexer and parser
 apply plugin: 'antlr'
 
 // This project uses a few 3rd party libraries. Rather then downloading
@@ -49,9 +49,13 @@ repositories {
 // Here, we list all the different libraries we plan on using.
 // Gradle will automatically download them from the repositories listed above.
 dependencies {
-    // TODO: Document
+    // We use antlr to help us generate a 'grammar' and a 'parser' for
+    // our calculator language.
     antlr group: 'org.antlr', name: 'antlr4', version: '4.5.1'
-    //compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
+    compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.5.1'
+
+    // We use jfreechart to help us chart graphs and other visualizations.
+    compile group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
 
     // We use jUnit to help us write tests.
     testCompile group: 'junit', name: 'junit', version: '4.12'
@@ -61,26 +65,23 @@ dependencies {
 // itself. Currently, we're augmenting gradle to make it easier for us
 // to build and run GUI programs.
 buildscript {
-    dependencies {
-        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
-    }
-
     repositories {
         mavenLocal()
         mavenCentral()
     }
 }
 
-// TODO: Document
+// Configure antlr plugin
 generateGrammarSource {
     maxHeapSize = '64m'
-    arguments += ['-visitor', '-long-messages', '-package', 'calculator.cse373.grammar']
+    arguments += ['-visitor', '-long-messages']
 }
 
 // Configure support to make this a command-line app
 apply plugin: 'application'
 mainClassName = "calculator.Main"
 
+// Configure how we run code
 run {
     standardInput = System.in
 }
@@ -111,7 +112,7 @@ test {
 
     reports {
         html.enabled = false
-        junitXml.enabled = false
+        junitXml.enabled = true
     }
 }
 

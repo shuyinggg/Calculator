@@ -1,18 +1,27 @@
 package calculator.interpreter.calculator;
 
+import calculator.gui.ImageDrawer;
 import calculator.interpreter.AstNode;
 import calculator.parser.Parser;
-import datastructures.concrete.ArrayDictionary;
 import datastructures.concrete.DoubleLinkedList;
+import datastructures.concrete.dictionaries.ArrayDictionary;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
 
+import java.io.PrintStream;
 import java.util.Iterator;
 
 public class Calculator {
+    // Components used by the calculator
     private Parser parser;
     private Interpreter interpreter;
+
+    // State
     private IDictionary<String, AstNode> variables;
+    private ImageDrawer imageDrawer;
+    private PrintStream console;
+
+    // Internal data
     private IDictionary<String, SpecialFunctionHandler> customFunctions;
     private IDictionary<String, SpecialFunctionHandler> specialFunctions;
     private IDictionary<String, Integer> precedenceMap;
@@ -20,9 +29,17 @@ public class Calculator {
     private static int WEAKEST_PRECEDENCE = Integer.MAX_VALUE;
 
     public Calculator() {
+        this(System.out, null);
+    }
+
+    public Calculator(PrintStream console, ImageDrawer imageDrawer) {
         this.parser = new Parser();
         this.interpreter = new Interpreter();
+
         this.variables = new ArrayDictionary<>();
+        this.console = console;
+        this.imageDrawer = imageDrawer;
+
         this.customFunctions = new ArrayDictionary<>();
         this.specialFunctions = new ArrayDictionary<>();
         this.precedenceMap = new ArrayDictionary<>();
@@ -44,7 +61,15 @@ public class Calculator {
         this.precedenceMap.put("-", 4);
     }
 
-    public String interpret(String input) {
+    public void setConsole(PrintStream console) {
+        this.console = console;
+    }
+
+    public void setImageDrawer(ImageDrawer imageDrawer) {
+        this.imageDrawer = imageDrawer;
+    }
+
+    public String evaluate(String input) {
         Environment env = this.prepareEnvironment();
         AstNode ast = this.parser.parse(input + "\n");
         AstNode normalizedAst = injectSimplify(env, ast);
@@ -55,17 +80,18 @@ public class Calculator {
     private Environment prepareEnvironment() {
         return new Environment(
                 this.variables,
-                System.out,
+                this.console,
+                this.imageDrawer,
                 this.customFunctions,
                 this.specialFunctions,
                 this.interpreter);
     }
 
-    public static AstNode injectSimplify(Environment env, AstNode node) {
+    private static AstNode injectSimplify(Environment env, AstNode node) {
         return wrapSimplifyFunc(injectSimplifyHelper(env, node));
     }
 
-    public static AstNode injectSimplifyHelper(Environment env, AstNode node) {
+    private static AstNode injectSimplifyHelper(Environment env, AstNode node) {
         if (node.isNumber()) {
             return node;
         } else if (node.isVariable()) {

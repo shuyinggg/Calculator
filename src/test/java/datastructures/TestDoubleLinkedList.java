@@ -300,57 +300,6 @@ public class TestDoubleLinkedList {
     }
 
     @Test(timeout=SECOND)
-    public void testDeleteBasic() {
-        IList<String> list = new DoubleLinkedList<>();
-        list.add("a");
-        list.add("b");
-        list.add("c");
-        list.add("d");
-
-        assertEquals("b", list.delete(1));
-        this.assertListMatches(new String[]{"a", "c", "d"}, list);
-
-        assertEquals("a", list.delete(0));
-        this.assertListMatches(new String[]{"c", "d"}, list);
-
-        assertEquals("d", list.delete(1));
-        this.assertListMatches(new String[]{"c"}, list);
-    }
-
-    @Test(timeout=SECOND)
-    public void testDeleteSingleElementList() {
-        IList<String> list = new DoubleLinkedList<>();
-        list.add("a");
-
-        assertEquals("a", list.delete(0));
-        this.assertListMatches(new String[]{}, list);
-
-        list.add("b");
-        this.assertListMatches(new String[]{"b"}, list);
-
-        assertEquals("b", list.delete(0));
-        this.assertListMatches(new String[]{}, list);
-    }
-
-    @Test(timeout=SECOND)
-    public void testDeleteOutOfBoundsThrowsException() {
-        IList<String> list = new DoubleLinkedList<>();
-        try {
-            list.delete(-1);
-            fail("Expected IndexOutOfBoundsException");
-        } catch (IndexOutOfBoundsException ex) {
-            // Do nothing: this is ok
-        }
-
-        try {
-            list.delete(3);
-            fail("Expected IndexOutOfBoundsException");
-        } catch (IndexOutOfBoundsException ex) {
-            // Do nothing: this is ok
-        }
-    }
-
-    @Test(timeout=SECOND)
     public void testIndexOfAndContainsBasic() {
         IList<String> list = new DoubleLinkedList<>();
         list.add("a");
@@ -368,16 +317,6 @@ public class TestDoubleLinkedList {
         assertTrue(list.contains("a"));
         assertTrue(list.contains("c"));
         assertFalse(list.contains("z"));
-
-        // Try deleting the first occurrence of a char
-        assertEquals("a", list.delete(0));
-        assertEquals(3, list.indexOf("a"));
-        assertTrue(list.contains("a"));
-
-        // Try deleting all occurrences of a char
-        assertEquals("a", list.delete(3));
-        assertEquals(-1, list.indexOf("a"));
-        assertFalse(list.contains("a"));
     }
 
     @Test(timeout=SECOND)

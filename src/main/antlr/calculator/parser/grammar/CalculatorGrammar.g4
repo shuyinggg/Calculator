@@ -1,5 +1,9 @@
 grammar CalculatorGrammar;
 
+@header {
+    package calculator.parser.grammar;
+}
+
 /**
  * Parser rules
  */
@@ -9,18 +13,8 @@ program
     ;
 
 statement
-    : varName=IDENTIFIER ASSIGN expr=powExpr LINE_BREAK    # assignStmt
-    | expr=powExpr LINE_BREAK                              # exprStmt
-    ;
-
-powExpr
-    : left=powExpr op=POW right=negExpr                    # powExprBin
-    | expr=negExpr                                         # powExprSingle
-    ;
-
-negExpr
-    : MINUS expr=addExpr
-    | expr=addExpr
+    : varName=IDENTIFIER ASSIGN expr=addExpr LINE_BREAK    # assignStmt
+    | expr=addExpr LINE_BREAK                              # exprStmt
     ;
 
 addExpr
@@ -29,20 +23,32 @@ addExpr
     ;
 
 multiplyExpr
-    : left=multiplyExpr op=(MULTIPLY | DIVIDE) right=atomExpr   # multExprBin
-    | expr=atomExpr                                             # multExprSingle
+    : left=multiplyExpr op=(MULTIPLY | DIVIDE) right=negExpr    # multExprBin
+    | expr=negExpr                                              # multExprSingle
     ;
+
+negExpr
+    : MINUS expr=negExpr                                   # negExprUnary
+    | expr=powExpr                                         # negExprSingle
+    ;
+
+// The exponentiation operator is right-associative
+powExpr
+    : left=atomExpr op=POW right=powExpr                   # powExprBin
+    | expr=atomExpr                                        # powExprSingle
+    ;
+
 
 atomExpr
     : value=NUMBER                                      # number
     | rawText=STRING                                    # rawString
     | varName=IDENTIFIER                                # variable
     | funcName=IDENTIFIER LPAREN args=arglist RPAREN    # funcName
-    | LPAREN expr=powExpr RPAREN                        # parenExpr
+    | LPAREN expr=addExpr RPAREN                        # parenExpr
     ;
 
 arglist
-    : (values+=powExpr (COMMA values+=powExpr)*)?
+    : (values+=addExpr (COMMA values+=addExpr)*)?
     ;
 
 /**

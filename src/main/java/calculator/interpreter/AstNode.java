@@ -81,11 +81,11 @@ public class AstNode {
     /**
      * Returns the variable or operation name.
      *
-     * @throws IllegalStateException  if this node is a number
+     * @throws EvaluationError  if this node is a number
      */
     public String getName() {
         if (this.isNumber()) {
-            throw new IllegalStateException("Numbers do not have a name");
+            throw new EvaluationError("Attempted to call 'getName()' on a number AstNode");
         }
         return this.name;
     }
@@ -93,11 +93,11 @@ public class AstNode {
     /**
      * Returns the numeric value of this node.
      *
-     * @throws IllegalStateException  if this node does not represent a number
+     * @throws EvaluationError  if this node does not represent a number
      */
     public double getNumericValue() {
         if (!this.isNumber()) {
-            throw new IllegalStateException("Expressions and variables are not numbers");
+            throw new EvaluationError("Attempted to call 'getNumericValue()' on a variable or operation AstNode");
         }
         return Double.parseDouble(this.name);
     }
