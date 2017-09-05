@@ -1,5 +1,6 @@
 package calculator.interpreter.calculator;
 
+import calculator.gui.ImageDrawer;
 import calculator.interpreter.AstNode;
 import calculator.interpreter.EvaluationError;
 import datastructures.concrete.DoubleLinkedList;

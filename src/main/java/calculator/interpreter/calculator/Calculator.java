@@ -52,6 +52,8 @@ public class Calculator {
         // Internal functions (that need to manipulate control flow or the environment somehow)
         this.specialFunctions.put("block", Builtins::handleBlock);
         this.specialFunctions.put("assign", Builtins::handleAssign);
+        this.specialFunctions.put("quit", Builtins::handleQuit);
+        this.specialFunctions.put("exit", Builtins::handleQuit);
 
         this.precedenceMap.put("^", 1);
         this.precedenceMap.put("negate", 2);

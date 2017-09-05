@@ -1,34 +1,87 @@
 package calculator.parser;
 
 import calculator.interpreter.AstNode;
-import calculator.parser.grammar.CalculatorGrammarBaseVisitor;
 import calculator.parser.grammar.CalculatorGrammarLexer;
 import calculator.parser.grammar.CalculatorGrammarParser;
+import calculator.parser.grammar.CalculatorGrammarParserBaseVisitor;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IList;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 
 import java.io.IOException;
 import java.io.StringReader;
 
 public class Parser {
     public AstNode parse(String rawInput) {
+        CharStream input;
         try {
-            CharStream input = new ANTLRInputStream(new StringReader(rawInput));
-            CalculatorGrammarLexer lexer = new CalculatorGrammarLexer(input);
-            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-            CalculatorGrammarParser parser = new CalculatorGrammarParser(tokenStream);
-
-            CalculatorGrammarParser.ProgramContext entryPoint = parser.program();
-            return new AstConverter().visitProgram(entryPoint);
+            input = new ANTLRInputStream(new StringReader(rawInput));
         } catch (IOException ex) {
-            throw new RuntimeException("Compile error", ex);
+            throw new ParseError(
+                    "Unexpected fatal error loading text. This should never happen!",
+                    ex);
+        }
+
+        CalculatorGrammarLexer lexer = new CalculatorGrammarLexer(input);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(new ThrowingErrorListener());
+
+        CommonTokenStream tokenStream = this.ensureIsComplete(new CommonTokenStream(lexer));
+
+        CalculatorGrammarParser parser = new CalculatorGrammarParser(tokenStream);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new ThrowingErrorListener());
+
+        CalculatorGrammarParser.ProgramContext entryPoint = parser.program();
+        return new AstConverter().visitProgram(entryPoint);
+    }
+
+    public CommonTokenStream ensureIsComplete(CommonTokenStream stream) {
+        int balanceCount = 0;
+        int lastLine = 0;
+        boolean lastWasLineContinuation = false;
+        stream.fill();
+        for (Token token : stream.getTokens()) {
+            int type = token.getType();
+            lastLine = token.getLine();
+
+            // Check for parenthesis nesting
+            if (type == CalculatorGrammarLexer.LPAREN) {
+                balanceCount += 1;
+            } else if (type == CalculatorGrammarLexer.RPAREN) {
+                balanceCount -= 1;
+            } else if (type == CalculatorGrammarLexer.LINE_BREAK) {
+                this.verifyBalanceCount(token.getLine(), balanceCount);
+            }
+
+            if (type != CalculatorGrammarLexer.EOF) {
+                lastWasLineContinuation = (type == CalculatorGrammarLexer.LINE_CONTINUATION);
+            }
+        }
+
+        this.verifyBalanceCount(lastLine, balanceCount);
+
+        if (lastWasLineContinuation) {
+            throw new IncompleteInputError("Line continuation at end of file at line " + lastLine);
+        }
+
+        return stream;
+    }
+
+    private void verifyBalanceCount(int lineno, int balanceCount) {
+        if (balanceCount > 0) {
+            // If the balance count is 0, the lexer and parser itself will catch it.
+            throw new IncompleteInputError(
+                    String.format("Parens on line %d are unbalanced; missing %d closing parens",
+                            lineno, balanceCount));
+        } else if (balanceCount < 0){
+            throw new IncompleteInputError(
+                    String.format("Parens on line %d are unbalanced; missing %d opening parens",
+                            lineno, -balanceCount));
         }
     }
 
-    private static class AstConverter extends CalculatorGrammarBaseVisitor<AstNode> {
+    private static class AstConverter extends CalculatorGrammarParserBaseVisitor<AstNode> {
         private IList<AstNode> asList(AstNode... nodes) {
             IList<AstNode> list = new DoubleLinkedList<>();
             for (AstNode node : nodes) {
@@ -143,6 +196,43 @@ public class Parser {
                 out.add(this.visit(item));
             }
             return out;
+        }
+    }
+
+    public static class ThrowingErrorListener extends BaseErrorListener {
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer,
+                                Object offendingSymbol,
+                                int line,
+                                int charPositionInLine,
+                                String msg,
+                                RecognitionException e) {
+            System.out.println(msg);
+            String tokenText = this.escape(e.getOffendingToken().getText());
+            throw new ParseError(
+                    String.format(
+                            "Unexpected '%s' on line %d, col %d",
+                            tokenText,
+                            line,
+                            charPositionInLine),
+                    e);
+        }
+
+        private String escape(String str) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < str.length(); i++) {
+                char ch = str.charAt(i);
+                if (ch == '\n') {
+                    builder.append("\\n");
+                } else if (ch == '\r') {
+                    builder.append("\\r");
+                } else if (ch == '\t') {
+                    builder.append("\\t");
+                } else {
+                    builder.append(ch);
+                }
+            }
+            return builder.toString();
         }
     }
 }

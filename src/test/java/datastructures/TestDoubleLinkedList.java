@@ -15,10 +15,31 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class TestDoubleLinkedList {
-    private static final int SECOND = 1000;
+    /**
+     * We use 1 second as the default timeout for many of our tests.
+     *
+     * One second is typically extremely generous: most of your tests should
+     * finish in milliseconds. If one of your tests is timing out, you're almost
+     * certainly doing something wrong.
+     */
+    protected static final int SECOND = 1000;
 
-    private IList<String> makeBasicList() {
-        IList<String> list = new DoubleLinkedList<>();
+    /**
+     * Please call this method whenever you need to create a new DoubleLinkedList instance
+     * instead of calling the constructor directly. Our private tests rely on this method.
+     */
+    protected <T> IList<T> makeInstance() {
+        return new DoubleLinkedList<>();
+    }
+
+    /**
+     * This method creates a simple list containing three elements to help minimize
+     * redundancy later in our tests.
+     *
+     * Please do not modify this method: our private tests will also use this method.
+     */
+    protected IList<String> makeBasicList() {
+        IList<String> list = this.makeInstance();;
 
         list.add("a");
         list.add("b");
@@ -27,7 +48,14 @@ public class TestDoubleLinkedList {
         return list;
     }
 
-    private <T> void assertListMatches(T[] expected, IList<T> actual) {
+    /**
+     * This test will check if a list contains exactly the same elements as
+     * the "expected" array. See the tests you were provided for example
+     * usage.
+     *
+     * Please do not modify this method: our private tests rely on this.
+     */
+    protected <T> void assertListMatches(T[] expected, IList<T> actual) {
         assertEquals(expected.length, actual.size());
         assertEquals(expected.length == 0, actual.isEmpty());
 
@@ -45,13 +73,6 @@ public class TestDoubleLinkedList {
         }
     }
 
-    /**
-     * Notes:
-     *
-     * - By default, most tests have a timeout period of 1 second. This is an extremely
-     *   generous limit -- many of the tests should complete in under 10 milliseconds.
-     */
-
     @Test(timeout=SECOND)
     public void testAddAndGetBasic() {
         IList<String> list = makeBasicList();
@@ -60,7 +81,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=2 * SECOND)
     public void testAddAndGetWorksForManyNumbers() {
-        IList<Integer> list = new DoubleLinkedList<>();
+        IList<Integer> list = this.makeInstance();;
         int CAP = 1000;
         for (int i = 0; i < CAP; i++) {
             list.add(i * 2);
@@ -75,7 +96,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=15 * SECOND)
     public void testAddIsEfficient() {
-        IList<Integer> list = new DoubleLinkedList<>();
+        IList<Integer> list = this.makeInstance();;
         int CAP = 5000000;
         for (int i = 0; i < CAP; i++) {
             list.add(i * 2);
@@ -98,7 +119,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=SECOND)
     public void testAddAndRemoveFromEnd() {
-        IList<Integer> list = new DoubleLinkedList<>();
+        IList<Integer> list = this.makeInstance();;
         int CAP = 1000;
 
         for (int i = 0; i < CAP; i++) {
@@ -119,7 +140,7 @@ public class TestDoubleLinkedList {
     public void testAlternatingAddAndRemove() {
         int ITERATIONS = 1000;
 
-        IList<String> list = new DoubleLinkedList<>();
+        IList<String> list = this.makeInstance();;
 
         for (int i = 0; i < ITERATIONS; i++) {
             String entry = "" + i;
@@ -129,6 +150,19 @@ public class TestDoubleLinkedList {
             String out = list.remove();
             assertEquals(entry, out);
             assertEquals(0, list.size());
+        }
+    }
+
+    @Test(timeout=5 * SECOND)
+    public void testAddAndRemoveFromEndIsEfficient() {
+        IList<Integer> list = new DoubleLinkedList<>();
+        for (int i = 0; i < 10000; i++) {
+            list.add(i);
+        }
+
+        for (int i = 0; i < 10000; i++) {
+            list.add(-1);
+            list.remove();
         }
     }
 
@@ -192,7 +226,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=SECOND)
     public void testSetWithOneElement() {
-        IList<String> list = new DoubleLinkedList<>();
+        IList<String> list = this.makeInstance();;
         list.add("foo");
 
         list.set(0, "bar");
@@ -223,7 +257,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=5 * SECOND)
     public void testSetManyItems() {
-        IList<String> list = new DoubleLinkedList<>();
+        IList<String> list = this.makeInstance();;
         int CAP = 10000;
 
         for (int i = 0; i < CAP; i++) {
@@ -263,8 +297,8 @@ public class TestDoubleLinkedList {
     @Test(timeout=SECOND)
     public void testInsertEmptyAndSingleElement() {
         // Lists 1 and 2: insert into empty
-        IList<String> list1 = new DoubleLinkedList<>();
-        IList<String> list2 = new DoubleLinkedList<>();
+        IList<String> list1 = this.makeInstance();;
+        IList<String> list2 = this.makeInstance();;
         list1.insert(0, "a");
         list2.insert(0, "a");
 
@@ -301,7 +335,8 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=SECOND)
     public void testIndexOfAndContainsBasic() {
-        IList<String> list = new DoubleLinkedList<>();
+        IList<String> list = this.makeInstance();
+
         list.add("a");
         list.add("b");
         list.add("c");
@@ -325,7 +360,7 @@ public class TestDoubleLinkedList {
         String item1 = "abcdefghijklmnopqrstuvwxyz";
         String item2 = item1 + "";
 
-        IList<String> list = new DoubleLinkedList<>();
+        IList<String> list = this.makeInstance();;
         list.add("foo");
         list.add(item1);
 
@@ -346,8 +381,8 @@ public class TestDoubleLinkedList {
         Random rand = new Random();
         rand.setSeed(12345);
 
-        IList<String> list = new DoubleLinkedList<>();
-        IList<String> refList = new DoubleLinkedList<>();
+        IList<String> list = this.makeInstance();;
+        IList<String> refList = this.makeInstance();;
 
         for (int i = 0; i < CAP; i++) {
             String entry = "";
@@ -371,7 +406,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=SECOND)
     public void testNullEntry() {
-        IList<Integer> list = new DoubleLinkedList<>();
+        IList<Integer> list = this.makeInstance();;
         list.add(1);
         list.add(2);
         list.add(3);
@@ -430,7 +465,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=SECOND)
     public void testIteratorOnEmptyList() {
-        IList<String> list = new DoubleLinkedList<>();
+        IList<String> list = this.makeInstance();;
         Iterator<String> iter = list.iterator();
 
         assertFalse(iter.hasNext());
@@ -444,7 +479,7 @@ public class TestDoubleLinkedList {
 
     @Test(timeout=15 * SECOND)
     public void testAddAndIteratorIsEfficient() {
-        IList<Integer> list = new DoubleLinkedList<>();
+        IList<Integer> list = this.makeInstance();
         int CAP = 5000000;
         for (int i = 0; i < CAP; i++) {
             list.add(i * 2);

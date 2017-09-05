@@ -1,9 +1,13 @@
 package calculator;
 
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import calculator.interpreter.calculator.Calculator;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class TestInterpreter {
     @Test
@@ -31,7 +35,6 @@ public class TestInterpreter {
     @Test
     public void testExample3SymbolicEvaluation() {
         Calculator calc = new Calculator();
-
 
         assertEquals(
                 "x + 2 + 3 * sin(x) + 50 / 70",

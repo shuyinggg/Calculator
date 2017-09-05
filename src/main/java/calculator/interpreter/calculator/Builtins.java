@@ -2,9 +2,14 @@ package calculator.interpreter.calculator;
 
 import calculator.interpreter.AstNode;
 import calculator.interpreter.EvaluationError;
+import calculator.interpreter.QuitError;
 import datastructures.interfaces.IList;
 
 public class Builtins {
+    public static AstNode handleQuit(Environment env, AstNode wrapper) {
+        throw new QuitError();
+    }
+
     public static AstNode handleBlock(Environment env, AstNode wrapper) {
         assertSignatureOk("block", wrapper);
         AstNode out = new AstNode(1);

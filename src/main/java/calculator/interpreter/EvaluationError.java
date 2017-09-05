@@ -1,10 +1,6 @@
 package calculator.interpreter;
 
 public class EvaluationError extends RuntimeException {
-    public EvaluationError() {
-        super();
-    }
-
     public EvaluationError(String message) {
         super(message);
     }

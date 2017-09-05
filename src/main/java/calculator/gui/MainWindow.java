@@ -1,7 +1,9 @@
 package calculator.gui;
 
 import calculator.interpreter.EvaluationError;
+import calculator.interpreter.QuitError;
 import calculator.interpreter.calculator.Calculator;
+import calculator.parser.IncompleteInputError;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
@@ -114,6 +116,8 @@ public class MainWindow extends JFrame {
         private DisallowEditingPastContentFilter filter;
         private Calculator calculator;
 
+        private String tempText;
+
         public TextAreaResponder(JFrame frame,
                                  JTextArea area,
                                  DisallowEditingPastContentFilter filter,
@@ -122,6 +126,7 @@ public class MainWindow extends JFrame {
             this.area = area;
             this.filter = filter;
             this.calculator = calculator;
+            this.tempText = "";
         }
 
         @Override
@@ -133,21 +138,24 @@ public class MainWindow extends JFrame {
                     int start = this.area.getLineStartOffset(lineno);
                     int end = this.area.getLineEndOffset(lineno);
                     String enteredText = this.area.getText().substring(start, end);
-                    if (enteredText.startsWith(">>> ")) {
+                    if (enteredText.startsWith(">>> ") || enteredText.startsWith("... ")) {
                         enteredText = enteredText.substring(4);
                     }
 
-                    // Handle input
-                    if (enteredText.equals("quit()\n")) {
-                        this.frame.dispose();
-                        return;
-                    }
+                    this.tempText += enteredText;
 
-                    String response;
+                    // Run command and handle error processing
+                    boolean complete = true;
+                    String response = "";
                     try {
-                        response = this.calculator.evaluate(enteredText);
+                        response = this.calculator.evaluate(this.tempText);
+                    } catch (IncompleteInputError ex) {
+                        complete = false;
                     } catch (EvaluationError ex) {
                         response = "ERROR: " + ex.getMessage();
+                    } catch (QuitError ex) {
+                        this.frame.dispose();
+                        return;
                     } catch (Exception ex) {
                         this.frame.dispose();
                         throw ex;
@@ -155,8 +163,13 @@ public class MainWindow extends JFrame {
 
                     // Add response
                     this.filter.allowEditing();
-                    this.area.append(response + "\n");
-                    this.area.append(">>> ");
+                    if (complete) {
+                        this.area.append(response + "\n");
+                        this.area.append(">>> ");
+                        this.tempText = "";
+                    } else {
+                        this.area.append("... ");
+                    }
                     this.filter.disallowEditing();
 
                     int newOffset = this.area.getDocument().getLength();

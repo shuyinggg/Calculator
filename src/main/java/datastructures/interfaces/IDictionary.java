@@ -1,9 +1,6 @@
 package datastructures.interfaces;
 
-import datastructures.concrete.KVPair;
 import misc.exceptions.NoSuchKeyException;
-
-import java.util.Iterator;
 
 /**
  * Represents a data structure that contains a bunch of key-value mappings. Each key must be unique.
@@ -15,16 +12,6 @@ public interface IDictionary<K, V> {
      * @throws NoSuchKeyException if the dictionary does not contain the given key.
      */
     V get(K key);
-
-    /**
-     * Returns the value corresponding to the given key, if the key exists
-     * in the map.
-     *
-     * If the map does *not* contain the given key, returns the given value.
-     *
-     * Note: this method does not modify the map in any way.
-     */
-    V getOrDefault(K key, V defaultValue);
 
     /**
      * Adds the key-value pair to the dictionary. If the key already exists in the dictionary,
