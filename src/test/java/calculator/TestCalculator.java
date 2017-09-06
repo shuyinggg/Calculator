@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class TestInterpreter extends BaseTest {
+public class TestCalculator extends BaseTest {
     /**
      * The exact output of your calculator can vary if you decided to go
      * above-and-beyond and add extra functionality.
