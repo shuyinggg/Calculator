@@ -7,12 +7,11 @@ import static org.junit.Assert.fail;
 
 import datastructures.concrete.dictionaries.ArrayDictionary;
 import datastructures.interfaces.IDictionary;
+import misc.BaseTest;
 import misc.exceptions.NoSuchKeyException;
 import org.junit.Test;
 
-public class TestArrayDictionary {
-    private static final int SECOND = 1000;
-
+public class TestArrayDictionary extends BaseTest {
     private IDictionary<String, String> makeBasicDictionary() {
         IDictionary<String, String> dict = new ArrayDictionary<>();
         dict.put("keyA", "valA");

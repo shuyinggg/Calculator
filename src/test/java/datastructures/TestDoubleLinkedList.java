@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IList;
+import misc.BaseTest;
 import misc.exceptions.EmptyContainerException;
 import org.junit.Test;
 
@@ -14,16 +15,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
-public class TestDoubleLinkedList {
-    /**
-     * We use 1 second as the default timeout for many of our tests.
-     *
-     * One second is typically extremely generous: most of your tests should
-     * finish in milliseconds. If one of your tests is timing out, you're almost
-     * certainly doing something wrong.
-     */
-    protected static final int SECOND = 1000;
-
+public class TestDoubleLinkedList extends BaseTest {
     /**
      * Please call this method whenever you need to create a new DoubleLinkedList instance
      * instead of calling the constructor directly. Our private tests rely on this method.
@@ -72,6 +64,14 @@ public class TestDoubleLinkedList {
             }
         }
     }
+
+    /**
+     * Note: We use 1 second as the default timeout for many of our tests.
+     *
+     * One second is typically extremely generous: most of your tests should
+     * finish in milliseconds. If one of your tests is timing out, you're almost
+     * certainly doing something wrong.
+     */
 
     @Test(timeout=SECOND)
     public void testAddAndGetBasic() {

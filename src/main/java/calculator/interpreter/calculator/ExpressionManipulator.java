@@ -17,6 +17,14 @@ import misc.exceptions.NotYetImplementedException;
  * pairs in some cases.
  */
 public class ExpressionManipulator {
+    /**
+     * Takes the given AstNode node and attempts to convert it into a double.
+     *
+     * Returns a number AstNode containing the computed double.
+     *
+     * @throws EvaluationError  if any of the expressions contains an undefined variable.
+     * @throws EvaluationError  if any of the expressions uses an unknown operation.
+     */
     public static AstNode toDouble(Environment env, AstNode node) {
         // To help you get started, we've implemented this method for you.
         // You should fill in the TODOs in the 'toDoubleHelper' method.
@@ -81,7 +89,50 @@ public class ExpressionManipulator {
         throw new NotYetImplementedException();
     }
 
+    /**
+     * Expected signature of plot:
+     *
+     * >>> plot(exprToPlot, var, varMin, varMax, step)
+     *
+     * Example 1:
+     *
+     * >>> plot(3 * x, x, 2, 5, 0.5)
+     *
+     * This command will plot the equation "3 * x", varying "x" from 2 to 5 in 0.5
+     * increments. In this case, this means you'll be plotting the following points:
+     *
+     * [(2, 6), (2.5, 7.5), (3, 9), (3.5, 10.5), (4, 12), (4.5, 13.5), (5, 15)]
+     *
+     * ---
+     *
+     * Another example: now, we're plotting the quadratic equation "a^2 + 4a + 4"
+     * from -10 to 10 in 0.01 increments. In this case, "a" is our "x" variable.
+     *
+     * >>> c := 4
+     * 4
+     * >>> step := 0.01
+     * 0.01
+     * >>> plot(a^2 + c*a + a, a, -10, 10, step)
+     *
+     * ---
+     *
+     * @throws EvaluationError  if any of the expressions contains an undefined variable.
+     * @throws EvaluationError  if varMin > varMax
+     * @throws EvaluationError  if 'var' was already defined
+     * @throws EvaluationError  if 'step' is zero or negative
+     */
     public static AstNode plot(Environment env, AstNode node) {
         throw new NotYetImplementedException();
+
+        // Note: every single function we add MUST return an
+        // AST node that your "simplify" function is capable of handling.
+        // However, your "simplify" function doesn't really know what to do
+        // with "plot" functions (and what is the "plot" function supposed to
+        // evaluate to anyways?) so we'll settle for just returning an
+        // arbitrary number.
+        //
+        // When working on this method, you should uncomment the following line:
+        //
+        // return new AstNode(1);
     }
 }

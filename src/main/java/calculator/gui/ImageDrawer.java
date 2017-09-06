@@ -24,7 +24,7 @@ import java.util.Iterator;
 public class ImageDrawer implements ImageObserver {
     private static int UNKNOWN_DIMENSION = -1;
 
-    private Image image;
+    private Graphics graphics;
     private int width;
     private int height;
 
@@ -32,9 +32,18 @@ public class ImageDrawer implements ImageObserver {
      * Creates a new ImageDrawer object based on the given panel.
      */
     public ImageDrawer(Image image) {
-        this.image = image;
+        this.graphics = image.getGraphics();
         this.width = image.getWidth(this);
         this.height = image.getHeight(this);
+    }
+
+    /**
+     * Creates a new ImageDrawer object based on the given panel.
+     */
+    public ImageDrawer(Graphics graphics, int width, int height) {
+        this.graphics = graphics;
+        this.width = width;
+        this.height = height;
     }
 
     /**
@@ -46,7 +55,7 @@ public class ImageDrawer implements ImageObserver {
      * *do* use the same 'Graphics' object.
      */
     public Graphics getGraphics() {
-        return image.getGraphics();
+        return this.graphics;
     }
 
     /**
@@ -136,7 +145,6 @@ public class ImageDrawer implements ImageObserver {
         boolean widthReady = (infoflags & ImageObserver.WIDTH) != 0;
         boolean heightReady = (infoflags & ImageObserver.HEIGHT) != 0;
 
-        this.image = img;
         if (widthReady && heightReady) {
             this.width = width;
             this.height = height;

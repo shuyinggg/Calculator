@@ -26,6 +26,7 @@ public class Calculator {
     private IDictionary<String, SpecialFunctionHandler> specialFunctions;
     private IDictionary<String, Integer> precedenceMap;
 
+    private static int STRONGEST_PRECEDENCE = 0;
     private static int WEAKEST_PRECEDENCE = Integer.MAX_VALUE;
 
     public Calculator() {
@@ -142,11 +143,12 @@ public class Calculator {
             return node.getName();
         } else {
             String name = node.getName();
-            int currPrecedenceLevel = this.precedenceMap.containsKey(name) ? this.precedenceMap.get(name) : 0;
+            int currPrecedenceLevel = this.precedenceMap.containsKey(name) ? this.precedenceMap.get(name) : STRONGEST_PRECEDENCE;
+            int childPrecedenceLevel = this.precedenceMap.containsKey(name) ? currPrecedenceLevel : WEAKEST_PRECEDENCE;
 
             IList<String> children = new DoubleLinkedList<>();
             for (AstNode child : node.getChildren()) {
-                children.add(this.convertToString(child, currPrecedenceLevel));
+                children.add(this.convertToString(child, childPrecedenceLevel));
             }
 
             String out;
