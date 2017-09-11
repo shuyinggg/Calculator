@@ -78,12 +78,9 @@ generateGrammarSource {
             '-Werror',
             '-visitor',
             '-long-messages',
-            //'-lib', 'src/main/antlr/calculator/parser/grammar',
-            //'-lib', 'build/generated-src/antlr/main/calculator/parser/grammar/'
-            //'-o', 'build/generated-src/antlr/main/calculator/parser/grammar/',
             '-package', 'calculator.parser.grammar'
     ]
-    outputDirectory = new File('build/generated-src/antlr/main/calculator/parser/grammar/')
+    outputDirectory = new File('src/main/java/calculator/parser/grammar/')
 }
 
 // Configure support to make this a command-line app
