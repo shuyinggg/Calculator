@@ -19,7 +19,7 @@ public class MainWindow extends JFrame {
     public static void launch() {
         EventQueue.invokeLater(() -> {
             MainWindow window = new MainWindow(
-                    "Test window",
+                    "Calculator",
                     800,
                     600,
                     10);
