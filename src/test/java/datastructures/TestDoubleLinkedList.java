@@ -31,7 +31,7 @@ public class TestDoubleLinkedList extends BaseTest {
      * Please do not modify this method: our private tests will also use this method.
      */
     protected IList<String> makeBasicList() {
-        IList<String> list = this.makeInstance();;
+        IList<String> list = this.makeInstance();
 
         list.add("a");
         list.add("b");
