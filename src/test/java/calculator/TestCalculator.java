@@ -7,8 +7,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import calculator.gui.ImageDrawer;
-import calculator.interpreter.EvaluationError;
-import calculator.interpreter.calculator.Calculator;
+import calculator.errors.EvaluationError;
+import calculator.interpreter.Calculator;
 import datastructures.interfaces.IList;
 import misc.BaseTest;
 import org.junit.ComparisonFailure;

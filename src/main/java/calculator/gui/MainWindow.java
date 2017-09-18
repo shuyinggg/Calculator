@@ -1,9 +1,9 @@
 package calculator.gui;
 
-import calculator.interpreter.EvaluationError;
-import calculator.interpreter.QuitError;
-import calculator.interpreter.calculator.Calculator;
-import calculator.parser.IncompleteInputError;
+import calculator.errors.EvaluationError;
+import calculator.errors.QuitError;
+import calculator.interpreter.Calculator;
+import calculator.errors.IncompleteInputError;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;

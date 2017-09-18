@@ -1,14 +1,16 @@
-package calculator.interpreter.calculator;
+package calculator.interpreter;
 
+import calculator.ast.AstNode;
+import calculator.ast.BuiltinManipulators;
+import calculator.ast.ExpressionManipulators;
+import calculator.ast.AstManipulator;
 import calculator.gui.ImageDrawer;
-import calculator.interpreter.AstNode;
 import calculator.parser.Parser;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.concrete.dictionaries.ArrayDictionary;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
 
-import java.io.PrintStream;
 import java.util.Iterator;
 
 public class Calculator {
@@ -19,26 +21,24 @@ public class Calculator {
     // State
     private IDictionary<String, AstNode> variables;
     private ImageDrawer imageDrawer;
-    private PrintStream console;
 
     // Internal data
-    private IDictionary<String, SpecialFunctionHandler> customFunctions;
-    private IDictionary<String, SpecialFunctionHandler> specialFunctions;
+    private IDictionary<String, AstManipulator> customFunctions;
+    private IDictionary<String, AstManipulator> specialFunctions;
     private IDictionary<String, Integer> precedenceMap;
 
     private static int STRONGEST_PRECEDENCE = 0;
     private static int WEAKEST_PRECEDENCE = Integer.MAX_VALUE;
 
     public Calculator() {
-        this(System.out, null);
+        this(null);
     }
 
-    public Calculator(PrintStream console, ImageDrawer imageDrawer) {
+    public Calculator(ImageDrawer imageDrawer) {
         this.parser = new Parser();
         this.interpreter = new Interpreter();
 
         this.variables = new ArrayDictionary<>();
-        this.console = console;
         this.imageDrawer = imageDrawer;
 
         this.customFunctions = new ArrayDictionary<>();
@@ -46,15 +46,15 @@ public class Calculator {
         this.precedenceMap = new ArrayDictionary<>();
 
         // Your functions
-        this.customFunctions.put("simplify", ExpressionManipulator::simplify);
-        this.customFunctions.put("toDouble", ExpressionManipulator::toDouble);
-        this.customFunctions.put("plot", ExpressionManipulator::plot);
+        this.customFunctions.put("simplify", ExpressionManipulators::simplify);
+        this.customFunctions.put("toDouble", ExpressionManipulators::toDouble);
+        this.customFunctions.put("plot", ExpressionManipulators::plot);
 
         // Internal functions (that need to manipulate control flow or the environment somehow)
-        this.specialFunctions.put("block", Builtins::handleBlock);
-        this.specialFunctions.put("assign", Builtins::handleAssign);
-        this.specialFunctions.put("quit", Builtins::handleQuit);
-        this.specialFunctions.put("exit", Builtins::handleQuit);
+        this.specialFunctions.put("block", BuiltinManipulators::handleBlock);
+        this.specialFunctions.put("assign", BuiltinManipulators::handleAssign);
+        this.specialFunctions.put("quit", BuiltinManipulators::handleQuit);
+        this.specialFunctions.put("exit", BuiltinManipulators::handleQuit);
 
         this.precedenceMap.put("^", 1);
         this.precedenceMap.put("negate", 2);
@@ -64,15 +64,14 @@ public class Calculator {
         this.precedenceMap.put("-", 4);
     }
 
-    public void setConsole(PrintStream console) {
-        this.console = console;
-    }
-
     public void setImageDrawer(ImageDrawer imageDrawer) {
         this.imageDrawer = imageDrawer;
     }
 
     public String evaluate(String input) {
+        if (input.trim().equals("")) {
+            return "";
+        }
         Environment env = this.prepareEnvironment();
         AstNode ast = this.parser.parse(input + "\n");
         AstNode normalizedAst = injectSimplify(env, ast);
@@ -83,7 +82,6 @@ public class Calculator {
     private Environment prepareEnvironment() {
         return new Environment(
                 this.variables,
-                this.console,
                 this.imageDrawer,
                 this.customFunctions,
                 this.specialFunctions,

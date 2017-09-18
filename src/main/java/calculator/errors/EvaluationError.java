@@ -1,5 +1,9 @@
-package calculator.interpreter;
+package calculator.errors;
 
+/**
+ * Represents any kind of error that may be triggered while evaluating
+ * an AstNode in any way.
+ */
 public class EvaluationError extends RuntimeException {
     public EvaluationError(String message) {
         super(message);

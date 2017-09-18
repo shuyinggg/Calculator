@@ -1,10 +1,9 @@
-package calculator.interpreter.calculator;
+package calculator.interpreter;
 
+import calculator.ast.AstNode;
+import calculator.ast.AstManipulator;
 import calculator.gui.ImageDrawer;
-import calculator.interpreter.AstNode;
 import datastructures.interfaces.IDictionary;
-
-import java.io.PrintStream;
 
 /**
  * An 'Environment' object is a wrapper around every single item in
@@ -23,20 +22,17 @@ import java.io.PrintStream;
  */
 public class Environment {
     private IDictionary<String, AstNode> variables;
-    private PrintStream output;
     private ImageDrawer imageDrawer;
-    private IDictionary<String, SpecialFunctionHandler> customFunctions;
-    private IDictionary<String, SpecialFunctionHandler> specialFunctions;
+    private IDictionary<String, AstManipulator> customFunctions;
+    private IDictionary<String, AstManipulator> specialFunctions;
     private Interpreter interpreter;
 
     public Environment(IDictionary<String, AstNode> variables,
-                       PrintStream output,
                        ImageDrawer imageDrawer,
-                       IDictionary<String, SpecialFunctionHandler> customFunctions,
-                       IDictionary<String, SpecialFunctionHandler> specialFunctions,
+                       IDictionary<String, AstManipulator> customFunctions,
+                       IDictionary<String, AstManipulator> specialFunctions,
                        Interpreter interpreter) {
         this.variables = variables;
-        this.output = output;
         this.imageDrawer = imageDrawer;
         this.customFunctions = customFunctions;
         this.specialFunctions = specialFunctions;
@@ -66,21 +62,11 @@ public class Environment {
     }
 
     /**
-     * A printstream to the output -- lets us control where we print
-     * instead of having to always default to System.out.
-     *
-     * You can ignore this method.
-     */
-    public PrintStream getOutputStream() {
-        return this.output;
-    }
-
-    /**
      * Returns all custom functions that manipulate an expression in some way.
      *
      * You should ignore this method.
      */
-    public IDictionary<String, SpecialFunctionHandler> getCustomFunctions() {
+    public IDictionary<String, AstManipulator> getCustomFunctions() {
         return this.customFunctions;
     }
 
@@ -90,7 +76,7 @@ public class Environment {
      *
      * You should ignore this method.
      */
-    public IDictionary<String, SpecialFunctionHandler> getSpecialFunctions() {
+    public IDictionary<String, AstManipulator> getSpecialFunctions() {
         return this.specialFunctions;
     }
 

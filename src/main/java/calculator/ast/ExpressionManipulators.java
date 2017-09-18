@@ -1,11 +1,8 @@
-package calculator.interpreter.calculator;
+package calculator.ast;
 
-import calculator.gui.ImageDrawer;
-import calculator.interpreter.AstNode;
-import calculator.interpreter.EvaluationError;
-import datastructures.concrete.DoubleLinkedList;
+import calculator.interpreter.Environment;
+import calculator.errors.EvaluationError;
 import datastructures.interfaces.IDictionary;
-import datastructures.interfaces.IList;
 import misc.exceptions.NotYetImplementedException;
 
 /**
@@ -16,7 +13,7 @@ import misc.exceptions.NotYetImplementedException;
  * Some of these methods should be recursive. You may want to consider using public-private
  * pairs in some cases.
  */
-public class ExpressionManipulator {
+public class ExpressionManipulators {
     /**
      * Takes the given AstNode node and attempts to convert it into a double.
      *

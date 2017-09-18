@@ -1,6 +1,8 @@
 package calculator.parser;
 
-import calculator.interpreter.AstNode;
+import calculator.ast.AstNode;
+import calculator.errors.IncompleteInputError;
+import calculator.errors.ParseError;
 import calculator.parser.grammar.CalculatorGrammarLexer;
 import calculator.parser.grammar.CalculatorGrammarParser;
 import calculator.parser.grammar.CalculatorGrammarParserBaseVisitor;
@@ -207,14 +209,19 @@ public class Parser {
                                 int charPositionInLine,
                                 String msg,
                                 RecognitionException e) {
-            System.out.println(msg);
-            String tokenText = this.escape(e.getOffendingToken().getText());
+            String error;
+            if (e == null) {
+                error = msg;
+            } else {
+                String tokenText = this.escape(e.getOffendingToken().getText());
+                error = String.format("Unxpected '%s'", tokenText);
+            }
             throw new ParseError(
                     String.format(
-                            "Unexpected '%s' on line %d, col %d",
-                            tokenText,
+                            "Line %d, col %d: %s",
                             line,
-                            charPositionInLine),
+                            charPositionInLine,
+                            error),
                     e);
         }
 

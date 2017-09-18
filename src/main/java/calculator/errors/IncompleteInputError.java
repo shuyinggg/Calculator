@@ -1,5 +1,11 @@
-package calculator.parser;
+package calculator.errors;
 
+/**
+ * An exception thrown by the parser indicating that the string
+ * it's parsing appears to be incomplete.
+ *
+ * You should ignore this file.
+ */
 public class IncompleteInputError extends ParseError {
     public IncompleteInputError() {
         super("Provided input is incomplete");

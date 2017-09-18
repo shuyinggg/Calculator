@@ -314,7 +314,7 @@ public class TestDoubleLinkedList extends BaseTest {
         this.assertListMatches(new String[] {"a", "b"}, list2);
     }
 
-    @Test(timeout=SECOND)
+    @Test
     public void testInsertOutOfBounds() {
         IList<String> list = this.makeBasicList();
 

@@ -1,6 +1,6 @@
-package calculator.interpreter.calculator;
+package calculator.interpreter;
 
-import calculator.interpreter.AstNode;
+import calculator.ast.AstNode;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IList;
 

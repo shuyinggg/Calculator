@@ -1,5 +1,6 @@
-package calculator.interpreter;
+package calculator.ast;
 
+import calculator.errors.EvaluationError;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IList;
 
