@@ -81,7 +81,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
     @Test(timeout=2 * SECOND)
     public void testAddAndGetWorksForManyNumbers() {
-        IList<Integer> list = this.makeInstance();;
+        IList<Integer> list = this.makeInstance();
         int CAP = 1000;
         for (int i = 0; i < CAP; i++) {
             list.add(i * 2);
@@ -96,7 +96,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
     @Test(timeout=15 * SECOND)
     public void testAddIsEfficient() {
-        IList<Integer> list = this.makeInstance();;
+        IList<Integer> list = this.makeInstance();
         int CAP = 5000000;
         for (int i = 0; i < CAP; i++) {
             list.add(i * 2);
@@ -119,7 +119,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
     @Test(timeout=SECOND)
     public void testAddAndRemoveFromEnd() {
-        IList<Integer> list = this.makeInstance();;
+        IList<Integer> list = this.makeInstance();
         int CAP = 1000;
 
         for (int i = 0; i < CAP; i++) {
@@ -140,7 +140,7 @@ public class TestDoubleLinkedList extends BaseTest {
     public void testAlternatingAddAndRemove() {
         int ITERATIONS = 1000;
 
-        IList<String> list = this.makeInstance();;
+        IList<String> list = this.makeInstance();
 
         for (int i = 0; i < ITERATIONS; i++) {
             String entry = "" + i;
@@ -226,7 +226,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
     @Test(timeout=SECOND)
     public void testSetWithOneElement() {
-        IList<String> list = this.makeInstance();;
+        IList<String> list = this.makeInstance();
         list.add("foo");
 
         list.set(0, "bar");
@@ -257,7 +257,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
     @Test(timeout=5 * SECOND)
     public void testSetManyItems() {
-        IList<String> list = this.makeInstance();;
+        IList<String> list = this.makeInstance();
         int CAP = 10000;
 
         for (int i = 0; i < CAP; i++) {
@@ -297,8 +297,8 @@ public class TestDoubleLinkedList extends BaseTest {
     @Test(timeout=SECOND)
     public void testInsertEmptyAndSingleElement() {
         // Lists 1 and 2: insert into empty
-        IList<String> list1 = this.makeInstance();;
-        IList<String> list2 = this.makeInstance();;
+        IList<String> list1 = this.makeInstance();
+        IList<String> list2 = this.makeInstance();
         list1.insert(0, "a");
         list2.insert(0, "a");
 
@@ -314,7 +314,7 @@ public class TestDoubleLinkedList extends BaseTest {
         this.assertListMatches(new String[] {"a", "b"}, list2);
     }
 
-    @Test
+    @Test(timeout=SECOND)
     public void testInsertOutOfBounds() {
         IList<String> list = this.makeBasicList();
 
@@ -331,6 +331,39 @@ public class TestDoubleLinkedList extends BaseTest {
         } catch (IndexOutOfBoundsException ex) {
             // Do nothing: this is ok
         }
+    }
+
+    @Test(timeout=15 * SECOND)
+    public void testInsertAtEndIsEfficient() {
+        IList<Integer> list = this.makeInstance();
+        int CAP = 5000000;
+        for (int i = 0; i < CAP; i++) {
+            list.insert(list.size(), i * 2);
+        }
+        assertEquals(CAP, list.size());
+    }
+
+    @Test(timeout=15 * SECOND)
+    public void testInsertNearEndIsEfficient() {
+        IList<Integer> list = this.makeInstance();
+        list.add(-1);
+        list.add(-2);
+
+        int CAP = 5000000;
+        for (int i = 0; i < CAP; i++) {
+            list.insert(list.size() - 2, i * 2);
+        }
+        assertEquals(CAP + 2, list.size());
+    }
+
+    @Test(timeout=15 * SECOND)
+    public void testInsertAtFrontIsEfficient() {
+        IList<Integer> list = this.makeInstance();
+        int CAP = 5000000;
+        for (int i = 0; i < CAP; i++) {
+            list.insert(0, i * 2);
+        }
+        assertEquals(CAP, list.size());
     }
 
     @Test(timeout=SECOND)
@@ -360,7 +393,7 @@ public class TestDoubleLinkedList extends BaseTest {
         String item1 = "abcdefghijklmnopqrstuvwxyz";
         String item2 = item1 + "";
 
-        IList<String> list = this.makeInstance();;
+        IList<String> list = this.makeInstance();
         list.add("foo");
         list.add(item1);
 
@@ -381,8 +414,8 @@ public class TestDoubleLinkedList extends BaseTest {
         Random rand = new Random();
         rand.setSeed(12345);
 
-        IList<String> list = this.makeInstance();;
-        IList<String> refList = this.makeInstance();;
+        IList<String> list = this.makeInstance();
+        IList<String> refList = this.makeInstance();
 
         for (int i = 0; i < CAP; i++) {
             String entry = "";
@@ -406,7 +439,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
     @Test(timeout=SECOND)
     public void testNullEntry() {
-        IList<Integer> list = this.makeInstance();;
+        IList<Integer> list = this.makeInstance();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -465,7 +498,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
     @Test(timeout=SECOND)
     public void testIteratorOnEmptyList() {
-        IList<String> list = this.makeInstance();;
+        IList<String> list = this.makeInstance();
         Iterator<String> iter = list.iterator();
 
         assertFalse(iter.hasNext());

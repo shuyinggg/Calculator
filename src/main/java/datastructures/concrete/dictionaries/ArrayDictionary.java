@@ -46,11 +46,6 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
     }
 
     @Override
-    public V getOrDefault(K key, V defaultValue) {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
     public void put(K key, V value) {
         throw new NotYetImplementedException();
     }
