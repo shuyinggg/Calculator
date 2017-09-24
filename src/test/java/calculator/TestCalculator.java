@@ -14,6 +14,7 @@ import misc.BaseTest;
 import org.junit.ComparisonFailure;
 import org.junit.Test;
 
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 
 public class TestCalculator extends BaseTest {
@@ -247,7 +248,7 @@ public class TestCalculator extends BaseTest {
         @Override
         public void drawScatterPlot(String title, String xAxisLabel, String yAxisLabel,
                                     IList<Double> xValues, IList<Double> yValues,
-                                    int x, int y, int width, int height) {
+                                    Rectangle2D drawReagion) {
             this.lastXValues = xValues;
             this.lastYValues = yValues;
         }

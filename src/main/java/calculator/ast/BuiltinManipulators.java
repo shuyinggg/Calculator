@@ -43,7 +43,9 @@ public class BuiltinManipulators {
     }
 
     private static void assertSignatureOk(String name, int numChildren, AstNode node) {
-        boolean ok = node.isOperation() && node.getName().equals(name) && node.getChildren().size() == numChildren;
+        boolean ok = node.isOperation()
+                && node.getName().equals(name)
+                && node.getChildren().size() == numChildren;
         if (!ok) {
             String msg = String.format(
                     "Input ('%s' w/ %d) does not match expected ('%s' w/ %d)",

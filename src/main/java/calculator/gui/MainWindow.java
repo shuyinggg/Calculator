@@ -16,13 +16,18 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 public class MainWindow extends JFrame {
+    public static final int DEFAULT_WIDTH = 800;
+    public static final int DEFAULT_DRAWING_HEIGHT = 600;
+    public static final int DEFAULT_TEXT_ROWS = 10;
+    public static final int DEFAULT_FONT_SIZE = 16;
+
     public static void launch() {
         EventQueue.invokeLater(() -> {
             MainWindow window = new MainWindow(
                     "Calculator",
-                    800,
-                    600,
-                    10);
+                    DEFAULT_WIDTH,
+                    DEFAULT_DRAWING_HEIGHT,
+                    DEFAULT_TEXT_ROWS);
             window.construct();
         });
     }
@@ -93,7 +98,7 @@ public class MainWindow extends JFrame {
         textArea.setFont(new Font(
                 Font.MONOSPACED,
                 Font.PLAIN,
-                16
+                DEFAULT_FONT_SIZE
         ));
         textArea.setText(">>> ");
 

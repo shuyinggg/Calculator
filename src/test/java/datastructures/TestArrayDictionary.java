@@ -50,10 +50,6 @@ public class TestArrayDictionary extends BaseTest {
         }
     }
 
-    /**
-     * TODO: document
-     */
-
     @Test(timeout=SECOND)
     public void testPutAndGetBasic() {
         IDictionary<String, String> dict = this.makeBasicDictionary();
@@ -132,18 +128,18 @@ public class TestArrayDictionary extends BaseTest {
     @Test(timeout=10 * SECOND)
     public void testPutAndGetMany() {
         IDictionary<Integer, Integer> dict = new ArrayDictionary<>();
-        int CAP = 10000;
+        int cap = 10000;
 
-        for (int i = 0; i < CAP; i++) {
+        for (int i = 0; i < cap; i++) {
             dict.put(i, i * 2);
         }
 
-        for (int i = CAP - 1; i >= 0; i--) {
+        for (int i = cap - 1; i >= 0; i--) {
             int value = dict.get(i);
             assertEquals(i * 2, value);
         }
 
-        assertEquals(CAP, dict.size());
+        assertEquals(cap, dict.size());
         assertFalse(dict.isEmpty());
     }
 
@@ -224,15 +220,15 @@ public class TestArrayDictionary extends BaseTest {
 
     @Test(timeout=5 * SECOND)
     public void testAddRemoveMany() {
-        int CAP = 15000;
+        int cap = 15000;
         IDictionary<Integer, Integer> dict = new ArrayDictionary<>();
 
         for (int repeats = 0; repeats < 3; repeats++) {
-            for (int i = 0; i < CAP; i++) {
+            for (int i = 0; i < cap; i++) {
                 dict.put(i, i * 2);
             }
 
-            for (int i = 0; i < CAP; i++) {
+            for (int i = 0; i < cap; i++) {
                 int value = dict.get(i);
                 assertEquals(i * 2, value);
             }
@@ -297,13 +293,13 @@ public class TestArrayDictionary extends BaseTest {
     @Test(timeout=SECOND)
     public void testGetMany() {
         IDictionary<String, String> dict = this.makeBasicDictionary();
-        int CAP = 100000;
+        int cap = 100000;
 
-        for (int i = 0; i < CAP; i++) {
+        for (int i = 0; i < cap; i++) {
             dict.put("keyC", "newValC");
         }
 
-        for (int i = 0; i < CAP; i++) {
+        for (int i = 0; i < cap; i++) {
             assertEquals("newValC", dict.get("keyC"));
         }
     }

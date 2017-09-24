@@ -27,8 +27,8 @@ public class Calculator {
     private IDictionary<String, AstManipulator> specialFunctions;
     private IDictionary<String, Integer> precedenceMap;
 
-    private static int STRONGEST_PRECEDENCE = 0;
-    private static int WEAKEST_PRECEDENCE = Integer.MAX_VALUE;
+    private static final int STRONGEST_PRECEDENCE = 0;
+    private static final int WEAKEST_PRECEDENCE = Integer.MAX_VALUE;
 
     public Calculator() {
         this(null);
@@ -141,8 +141,10 @@ public class Calculator {
             return node.getName();
         } else {
             String name = node.getName();
-            int currPrecedenceLevel = this.precedenceMap.containsKey(name) ? this.precedenceMap.get(name) : STRONGEST_PRECEDENCE;
-            int childPrecedenceLevel = this.precedenceMap.containsKey(name) ? currPrecedenceLevel : WEAKEST_PRECEDENCE;
+
+            boolean hasPrecedence = this.precedenceMap.containsKey(name);
+            int currPrecedenceLevel = hasPrecedence ? this.precedenceMap.get(name) : STRONGEST_PRECEDENCE;
+            int childPrecedenceLevel = hasPrecedence ? currPrecedenceLevel : WEAKEST_PRECEDENCE;
 
             IList<String> children = new DoubleLinkedList<>();
             for (AstNode child : node.getChildren()) {

@@ -22,7 +22,7 @@ import java.util.Iterator;
  * additional plotting functions.
  */
 public class ImageDrawer implements ImageObserver {
-    private static int UNKNOWN_DIMENSION = -1;
+    private static final int UNKNOWN_DIMENSION = -1;
 
     private Graphics graphics;
     private int width;
@@ -78,7 +78,9 @@ public class ImageDrawer implements ImageObserver {
         if (this.width == UNKNOWN_DIMENSION || this.height == UNKNOWN_DIMENSION) {
             throw new IllegalStateException("Unexpected fatal error: Image width or height unknown");
         }
-        this.drawScatterPlot(title, xAxisLabel, yAxisLabel, xValues, yValues, 0, 0, this.width, this.height);
+        this.drawScatterPlot(
+                title, xAxisLabel, yAxisLabel, xValues, yValues,
+                new Rectangle2D.Double(0, 0, this.width, this.height));
     }
 
     /**
@@ -95,16 +97,11 @@ public class ImageDrawer implements ImageObserver {
      * @param yAxisLabel  The label for the y axis
      * @param xValues     The x coordinate values to plot
      * @param yValues     The y coordinate values to plot
-     * @param x           Draws this chart so that the upper-left corner is located at this
-     *                    x-coordinate on the image. Units are in pixels.
-     * @param y           Draws this chart so that the upper-right corner is located at this
-     *                    y-coordinate on the image. Units are in pixels.
-     * @param width       Draws this chart to have this width. Units are in pixels.
-     * @param height      Draws this hcart to have this height. Units are in pixels.
+     * @param drawRegion  The region on the image to draw the chart on
      */
     public void drawScatterPlot(String title, String xAxisLabel, String yAxisLabel,
                                 IList<Double> xValues, IList<Double> yValues,
-                                int x, int y, int width, int height) {
+                                Rectangle2D drawRegion) {
         if (xValues.size() != yValues.size()) {
             throw new IllegalArgumentException("Number of 'x' values and 'y' values are not the same.");
         }
@@ -137,17 +134,17 @@ public class ImageDrawer implements ImageObserver {
 
         // We then draw this chart using the underlying Graphics object.
         Graphics2D g2 = (Graphics2D) this.getGraphics();
-        chart.draw(g2, new Rectangle2D.Double(x, y, width, height));
+        chart.draw(g2, drawRegion);
     }
 
     @Override
-    public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
+    public boolean imageUpdate(Image img, int infoflags, int x, int y, int newWidth, int newHeight) {
         boolean widthReady = (infoflags & ImageObserver.WIDTH) != 0;
         boolean heightReady = (infoflags & ImageObserver.HEIGHT) != 0;
 
         if (widthReady && heightReady) {
-            this.width = width;
-            this.height = height;
+            this.width = newWidth;
+            this.height = newHeight;
             return false;
         } else {
             return true;

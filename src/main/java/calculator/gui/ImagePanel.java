@@ -6,7 +6,7 @@ import javax.swing.event.AncestorListener;
 import java.awt.*;
 
 public class ImagePanel extends JPanel {
-    private static int DELAY = 100;  // In milliseconds
+    private static final int DELAY = 100;  // In milliseconds
     private Image image;
     private Timer timer;
 
@@ -53,9 +53,8 @@ public class ImagePanel extends JPanel {
 
         @Override
         public void ancestorRemoved(AncestorEvent event) {
-            Timer timer = ImagePanel.this.timer;
-            if (timer != null && timer.isRunning()) {
-                timer.stop();
+            if (ImagePanel.this.timer != null && ImagePanel.this.timer.isRunning()) {
+                ImagePanel.this.timer.stop();
                 ImagePanel.this.timer = null;
             }
         }

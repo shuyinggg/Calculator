@@ -76,7 +76,7 @@ public class Parser {
             throw new IncompleteInputError(
                     String.format("Parens on line %d are unbalanced; missing %d closing parens",
                             lineno, balanceCount));
-        } else if (balanceCount < 0){
+        } else if (balanceCount < 0) {
             throw new IncompleteInputError(
                     String.format("Parens on line %d are unbalanced; missing %d opening parens",
                             lineno, -balanceCount));
