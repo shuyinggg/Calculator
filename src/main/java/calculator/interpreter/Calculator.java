@@ -1,6 +1,10 @@
 package calculator.interpreter;
 
-import calculator.ast.*;
+import calculator.ast.AstManipulator;
+import calculator.ast.AstNode;
+import calculator.ast.BuiltinManipulators;
+import calculator.ast.ControlFlowManipulators;
+import calculator.ast.ExpressionManipulators;
 import calculator.gui.ImageDrawer;
 import calculator.parser.Parser;
 import datastructures.concrete.DoubleLinkedList;

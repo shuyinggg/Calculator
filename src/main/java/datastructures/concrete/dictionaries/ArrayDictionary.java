@@ -1,7 +1,6 @@
 package datastructures.concrete.dictionaries;
 
 import datastructures.interfaces.IDictionary;
-import misc.exceptions.NoSuchKeyException;
 import misc.exceptions.NotYetImplementedException;
 
 /**

@@ -1,7 +1,6 @@
 package datastructures.concrete;
 
 import datastructures.interfaces.IList;
-import misc.exceptions.EmptyContainerException;
 import misc.exceptions.NotYetImplementedException;
 
 import java.util.Iterator;
