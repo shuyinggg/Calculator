@@ -26,14 +26,17 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.antlr:antlr4:4.5.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.antlr:antlr4-runtime:4.5.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jfree:jfreechart:1.0.19" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.openjdk.jol:jol-core:0.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jfree:jcommon:1.0.23" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.antlr:antlr4:4.5.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.antlr:antlr4-runtime:4.5.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jfree:jfreechart:1.0.19" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.openjdk.jol:jol-core:0.9" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jfree:jcommon:1.0.23" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.antlr:antlr4:4.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.antlr:antlr4-runtime:4.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jfree:jfreechart:1.0.19" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jol:jol-core:0.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jfree:jcommon:1.0.23" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />

@@ -25,8 +25,8 @@ public class ImageDrawer implements ImageObserver {
     private static final int UNKNOWN_DIMENSION = -1;
 
     private Graphics graphics;
-    private int width;
-    private int height;
+    private int width = UNKNOWN_DIMENSION;
+    private int height = UNKNOWN_DIMENSION;
 
     /**
      * Creates a new ImageDrawer object based on the given panel.
@@ -56,6 +56,36 @@ public class ImageDrawer implements ImageObserver {
      */
     public Graphics getGraphics() {
         return this.graphics;
+    }
+
+    /**
+     * Returns the width of the window, in pixels.
+     *
+     * Note: the width may change if the user resizes the window, so be sure to
+     * recheck what this value is every time you need to use it again.
+     *
+     * @throws IllegalStateException   if the image width is somehow unknown
+     */
+    public int getWidth() {
+        if (this.width == UNKNOWN_DIMENSION) {
+            throw new IllegalStateException("Unexpected fatal error: Image width unknown");
+        }
+        return this.width;
+    }
+
+    /**
+     * Returns the height of the window, in pixels.
+     *
+     * Note: the height may change if the user resizes the window, so be sure to
+     * recheck what this value is every time you need to use it again.
+     *
+     * @throws IllegalStateException   if the image width is somehow unknown
+     */
+    public int getHeight() {
+        if (this.height == UNKNOWN_DIMENSION) {
+            throw new IllegalStateException("Unexpected fatal error: Image height unknown");
+        }
+        return this.height;
     }
 
     /**

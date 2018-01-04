@@ -1,9 +1,6 @@
 package calculator.interpreter;
 
-import calculator.ast.AstNode;
-import calculator.ast.BuiltinManipulators;
-import calculator.ast.ExpressionManipulators;
-import calculator.ast.AstManipulator;
+import calculator.ast.*;
 import calculator.gui.ImageDrawer;
 import calculator.parser.Parser;
 import datastructures.concrete.DoubleLinkedList;
@@ -46,8 +43,8 @@ public class Calculator {
         this.precedenceMap = new ArrayDictionary<>();
 
         // Your functions
-        this.customFunctions.put("simplify", ExpressionManipulators::simplify);
-        this.customFunctions.put("toDouble", ExpressionManipulators::toDouble);
+        this.customFunctions.put("simplify", ExpressionManipulators::handleSimplify);
+        this.customFunctions.put("toDouble", ExpressionManipulators::handleToDouble);
         this.customFunctions.put("plot", ExpressionManipulators::plot);
 
         // Internal functions (that need to manipulate control flow or the environment somehow)
@@ -55,6 +52,12 @@ public class Calculator {
         this.specialFunctions.put("assign", BuiltinManipulators::handleAssign);
         this.specialFunctions.put("quit", BuiltinManipulators::handleQuit);
         this.specialFunctions.put("exit", BuiltinManipulators::handleQuit);
+        this.specialFunctions.put("clear", BuiltinManipulators::handleClear);
+
+        // Code you may implement for extra credit
+        this.specialFunctions.put("randomlyPick", ControlFlowManipulators::handleRandomlyPick);
+        this.specialFunctions.put("if", ControlFlowManipulators::handleIf);
+        this.specialFunctions.put("repeat", ControlFlowManipulators::handleRepeat);
 
         this.precedenceMap.put("^", 1);
         this.precedenceMap.put("negate", 2);
@@ -125,7 +128,12 @@ public class Calculator {
         }
     }
 
-    private String convertToString(AstNode node) {
+    /**
+     * This method returns a String representation of any valid AstNode.
+     *
+     * It doesn't really need to be public, but it's handy for debugging.
+     */
+    public String convertToString(AstNode node) {
         return this.convertToString(node, WEAKEST_PRECEDENCE);
     }
 

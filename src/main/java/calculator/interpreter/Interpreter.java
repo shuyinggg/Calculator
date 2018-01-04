@@ -16,7 +16,9 @@ public class Interpreter {
                 // Special functions take complete control
                 return env.getSpecialFunctions().get(nodeName).manipulate(env, node);
             } else {
-                // Regular, custom functions are executed normally
+                // Regular, custom functions are executed normally:
+                // we first execute the children before handing control back
+                // to the regular function (if one exists)
                 IList<AstNode> children = new DoubleLinkedList<>();
                 for (AstNode oldChild : node.getChildren()) {
                     children.add(evaluate(env, oldChild));

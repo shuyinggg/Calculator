@@ -1,13 +1,7 @@
 package calculator;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import calculator.gui.ImageDrawer;
 import calculator.errors.EvaluationError;
+import calculator.gui.ImageDrawer;
 import calculator.interpreter.Calculator;
 import datastructures.interfaces.IList;
 import misc.BaseTest;
@@ -16,6 +10,8 @@ import org.junit.Test;
 
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+
+import static org.junit.Assert.fail;
 
 public class TestCalculator extends BaseTest {
     /**

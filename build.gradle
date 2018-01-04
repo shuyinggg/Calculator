@@ -57,6 +57,9 @@ dependencies {
     // We use jfreechart to help us chart graphs and other visualizations.
     compile group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
 
+    // We use jol to help us extract the approximate size of Java objects
+    compile group: 'org.openjdk.jol', name: 'jol-core', version: '0.9'
+
     // We use jUnit to help us write tests.
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

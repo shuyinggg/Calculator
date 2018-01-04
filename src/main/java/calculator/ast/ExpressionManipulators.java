@@ -15,17 +15,29 @@ import misc.exceptions.NotYetImplementedException;
  */
 public class ExpressionManipulators {
     /**
-     * Takes the given AstNode node and attempts to convert it into a double.
+     * Accepts an 'toDouble(inner)' AstNode and returns a new node containing the simplified version
+     * of the 'inner' AstNode.
      *
-     * Returns a number AstNode containing the computed double.
+     * Preconditions:
+     *
+     * - The 'node' parameter is an operation AstNode with the name 'toDouble'.
+     * - The 'node' parameter has exactly one child: the AstNode to convert into a double.
+     *
+     * Postconditions:
+     *
+     * - Returns a number AstNode containing the computed double.
+     *
+     * For example, if this method receives the AstNode corresponding to
+     * 'toDouble(3 + 4)', this method should return the AstNode corresponding
+     * to '7'.
      *
      * @throws EvaluationError  if any of the expressions contains an undefined variable.
      * @throws EvaluationError  if any of the expressions uses an unknown operation.
      */
-    public static AstNode toDouble(Environment env, AstNode node) {
+    public static AstNode handleToDouble(Environment env, AstNode node) {
         // To help you get started, we've implemented this method for you.
         // You should fill in the TODOs in the 'toDoubleHelper' method.
-        return new AstNode(toDoubleHelper(env.getVariables(), node));
+        return new AstNode(toDoubleHelper(env.getVariables(), node.getChildren().get(0)));
     }
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
@@ -34,69 +46,63 @@ public class ExpressionManipulators {
             // TODO: your code here
             throw new NotYetImplementedException();
         } else if (node.isVariable()) {
-            if (!variables.containsKey(node.getName())) {
-                // If the expression contains an undefined variable, we give up.
-                throw new EvaluationError("Undefined variable: " + node.getName());
-            }
             // TODO: your code here
             throw new NotYetImplementedException();
         } else {
             String name = node.getName();
 
             // TODO: your code here
-
-            if (name.equals("+")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else if (name.equals("-")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else if (name.equals("*")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else if (name.equals("/")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else if (name.equals("^")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else if (name.equals("negate")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else if (name.equals("sin")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else if (name.equals("cos")) {
-                // TODO: your code here
-                throw new NotYetImplementedException();
-            } else {
-                throw new EvaluationError("Unknown operation: " + name);
-            }
+            throw new NotYetImplementedException();
         }
     }
 
-    public static AstNode simplify(Environment env, AstNode node) {
+    /**
+     * Accepts a 'simplify(inner)' AstNode and returns a new node containing the simplified version
+     * of the 'inner' AstNode.
+     *
+     * Preconditions:
+     *
+     * - The 'node' parameter is an operation AstNode with the name 'simplify'.
+     * - The 'node' parameter has exactly one child: the AstNode to simplify
+     *
+     * Postconditions:
+     *
+     * - Returns an AstNode containing the simplified inner parameter.
+     *
+     * For example, if we received the AstNode corresponding to the expression
+     * "simplify(3 + 4)", you would return the AstNode corresponding to the
+     * number "7".
+     *
+     * Note: there are many possible simplifications we could implement here,
+     * but you are only required to implement a single one: constant folding.
+     *
+     * That is, whenever you see expressions of the form "NUM + NUM", or
+     * "NUM - NUM", or "NUM * NUM", simplify them.
+     */
+    public static AstNode handleSimplify(Environment env, AstNode node) {
         // Try writing this one on your own!
         // Hint 1: Your code will likely be structured roughly similarly
-        //         to your "toDouble" method
+        //         to your "handleToDouble" method
         // Hint 2: When you're implementing constant folding, you may want
-        //         to call your "toDouble" method in some way
+        //         to call your "handleToDouble" method in some way
 
         // TODO: Your code here
         throw new NotYetImplementedException();
     }
 
     /**
-     * Expected signature of plot:
-     *
-     * >>> plot(exprToPlot, var, varMin, varMax, step)
+     * Accepts a 'plot(exprToPlot, var, varMin, varMax, step)' AstNode and
+     * generates the corresponding plot. Returns some arbitrary AstNode.
      *
      * Example 1:
      *
      * >>> plot(3 * x, x, 2, 5, 0.5)
      *
-     * This command will plot the equation "3 * x", varying "x" from 2 to 5 in 0.5
-     * increments. In this case, this means you'll be plotting the following points:
+     * This method will receive the AstNode corresponding to 'plot(3 * x, x, 2, 5, 0.5)'.
+     * Your 'handlePlot' method is then responsible for plotting the equation
+     * "3 * x", varying "x" from 2 to 5 in increments of 0.5.
+     *
+     * In this case, this means you'll be plotting the following points:
      *
      * [(2, 6), (2.5, 7.5), (3, 9), (3.5, 10.5), (4, 12), (4.5, 13.5), (5, 15)]
      *
@@ -119,6 +125,7 @@ public class ExpressionManipulators {
      * @throws EvaluationError  if 'step' is zero or negative
      */
     public static AstNode plot(Environment env, AstNode node) {
+        // TODO: Your code here
         throw new NotYetImplementedException();
 
         // Note: every single function we add MUST return an
