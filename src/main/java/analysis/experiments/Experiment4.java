@@ -13,7 +13,7 @@ public class Experiment4 {
     public static final long STEP = 100;
 
     public static void main(String[] args) {
-        IList<Long> listSizes = AnalysisUtils.makeList(0L, MAX_LIST_SIZE, STEP);
+        IList<Long> listSizes = AnalysisUtils.makeDoubleLinkedList(0L, MAX_LIST_SIZE, STEP);
 
         System.out.println("Starting experiment 4, test 1");
         IList<Long> test1Results = AnalysisUtils.runSingleTrial(listSizes, Experiment4::test1);
@@ -32,12 +32,12 @@ public class Experiment4 {
     }
 
     public static long test1(long size) {
-        IList<Long> list = AnalysisUtils.makeList(0L, size, 1L);
+        IList<Long> list = AnalysisUtils.makeDoubleLinkedList(0L, size, 1L);
         return AnalysisUtils.getApproximateMemoryUsed(list);
     }
 
     public static long test2(long size) {
-        IDictionary<Long, Long> dictionary = AnalysisUtils.makeDictionary(size);
+        IDictionary<Long, Long> dictionary = AnalysisUtils.makeArrayDictionary(size);
         return AnalysisUtils.getApproximateMemoryUsed(dictionary);
     }
 }

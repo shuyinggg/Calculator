@@ -14,7 +14,7 @@ public class Experiment1 {
     public static final long STEP = 100;
 
     public static void main(String[] args) {
-        IList<Long> dictionarySizes = AnalysisUtils.makeList(0L, MAX_DICTIONARY_SIZE, STEP);
+        IList<Long> dictionarySizes = AnalysisUtils.makeDoubleLinkedList(0L, MAX_DICTIONARY_SIZE, STEP);
 
         // Note: You may be wondering what doing 'Experiment1::test1' do?
         // Basically, what's happening here is that we're telling Java to:
@@ -29,6 +29,9 @@ public class Experiment1 {
         // so we can pass it around. On the other hand, why not? We can pass all kinds of things
         // ranging from ints and Strings and objects into methods -- why can't we also pass methods
         // themselves?
+        //
+        // For more information on how AnalysisUtils.runTrials uses the function object, see its
+        // method header comment.
 
         System.out.println("Starting experiment 1, test 1");
         IList<Long> test1Results = AnalysisUtils.runTrials(dictionarySizes, Experiment1::test1, NUM_TRIALS);
@@ -48,7 +51,7 @@ public class Experiment1 {
 
     public static long test1(long dictionarySize) {
         // We don't include the cost of constructing the dictionary when running this test
-        IDictionary<Long, Long> dictionary = AnalysisUtils.makeDictionary(dictionarySize);
+        IDictionary<Long, Long> dictionary = AnalysisUtils.makeArrayDictionary(dictionarySize);
 
         long start = System.currentTimeMillis();
         for (long i = 0L; i < dictionarySize; i++) {
@@ -59,7 +62,7 @@ public class Experiment1 {
     }
 
     public static long test2(long dictionarySize) {
-        IDictionary<Long, Long> dictionary = AnalysisUtils.makeDictionary(dictionarySize);
+        IDictionary<Long, Long> dictionary = AnalysisUtils.makeArrayDictionary(dictionarySize);
 
         long start = System.currentTimeMillis();
         for (long i = dictionarySize - 1; i >= 0; i--) {

@@ -15,6 +15,18 @@ import misc.exceptions.NotYetImplementedException;
  */
 public class ExpressionManipulators {
     /**
+     * Checks to make sure that the given node is an operation AstNode with the expected
+     * name and number of children. Throws an EvaluationError otherwise.
+     */
+    private static void assertNodeMatches(AstNode node, String expectedName, int expectedNumChildren) {
+        if (!node.isOperation()
+                && !node.getName().equals(expectedName)
+                && node.getChildren().size() != expectedNumChildren) {
+            throw new EvaluationError("Node is not valid " + expectedName + " node.");
+        }
+    }
+
+    /**
      * Accepts an 'toDouble(inner)' AstNode and returns a new node containing the simplified version
      * of the 'inner' AstNode.
      *
@@ -37,7 +49,14 @@ public class ExpressionManipulators {
     public static AstNode handleToDouble(Environment env, AstNode node) {
         // To help you get started, we've implemented this method for you.
         // You should fill in the TODOs in the 'toDoubleHelper' method.
-        return new AstNode(toDoubleHelper(env.getVariables(), node.getChildren().get(0)));
+        //
+        // If you're not sure why we have a public method calling a private
+        // recursive helper method, review your notes from CSE 143 (or the
+        // equivalent class you took) about the 'public-private pair' pattern.
+
+        assertNodeMatches(node, "toDouble", 1);
+        AstNode exprToConvert = node.getChildren().get(0);
+        return new AstNode(toDoubleHelper(env.getVariables(), exprToConvert));
     }
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
@@ -85,6 +104,11 @@ public class ExpressionManipulators {
         //         to your "handleToDouble" method
         // Hint 2: When you're implementing constant folding, you may want
         //         to call your "handleToDouble" method in some way
+        // Hint 3: When implementing your private pair, think carefully about
+        //         when you should recurse. Do you recurse after simplifying
+        //         the current level? Or before?
+
+        assertNodeMatches(node, "simplify", 1);
 
         // TODO: Your code here
         throw new NotYetImplementedException();
@@ -125,6 +149,8 @@ public class ExpressionManipulators {
      * @throws EvaluationError  if 'step' is zero or negative
      */
     public static AstNode plot(Environment env, AstNode node) {
+        assertNodeMatches(node, "plot", 5);
+
         // TODO: Your code here
         throw new NotYetImplementedException();
 

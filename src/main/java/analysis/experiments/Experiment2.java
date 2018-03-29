@@ -12,7 +12,7 @@ public class Experiment2 {
     public static final long STEP = 100;
 
     public static void main(String[] args) {
-        IList<Long> listSizes = AnalysisUtils.makeList(0L, MAX_LIST_SIZE, STEP);
+        IList<Long> listSizes = AnalysisUtils.makeDoubleLinkedList(0L, MAX_LIST_SIZE, STEP);
 
         System.out.println("Starting experiment 2, test 1");
         IList<Long> test1Results = AnalysisUtils.runTrials(listSizes, Experiment2::test1, NUM_TRIALS);
@@ -36,7 +36,7 @@ public class Experiment2 {
 
     public static Long test1(long listSize) {
         // We don't include the cost of constructing the list when running this test
-        IList<Long> list = AnalysisUtils.makeList(0L, listSize, 1L);
+        IList<Long> list = AnalysisUtils.makeDoubleLinkedList(0L, listSize, 1L);
 
         long start = System.currentTimeMillis();
         long temp = 0L;
@@ -49,7 +49,7 @@ public class Experiment2 {
     }
 
     public static Long test2(long listSize) {
-        IList<Long> list = AnalysisUtils.makeList(0L, listSize, 1L);
+        IList<Long> list = AnalysisUtils.makeDoubleLinkedList(0L, listSize, 1L);
 
         long start = System.currentTimeMillis();
         long temp = 0L;
@@ -63,7 +63,7 @@ public class Experiment2 {
     }
 
     public static Long test3(Long listSize) {
-        IList<Long> list = AnalysisUtils.makeList(0L, listSize, 1L);
+        IList<Long> list = AnalysisUtils.makeDoubleLinkedList(0L, listSize, 1L);
 
         long start = System.currentTimeMillis();
         long temp = 0L;

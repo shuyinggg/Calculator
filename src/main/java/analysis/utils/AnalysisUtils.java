@@ -16,9 +16,9 @@ import java.util.function.Function;
  */
 public class AnalysisUtils {
     /**
-     * Constructs a list of longs starting with 'size', going to 'end', in 'step' increments.
+     * Constructs a doubly-linked list of longs starting with 'size', going to 'end', in 'step' increments.
      */
-    public static IList<Long> makeList(long start, long end, long step) {
+    public static IList<Long> makeDoubleLinkedList(long start, long end, long step) {
         IList<Long> out = new DoubleLinkedList<>();
         for (long i = start; i < end; i += step) {
             out.add(i);
@@ -27,9 +27,9 @@ public class AnalysisUtils {
     }
 
     /**
-     * Constructs a dictionary containing keys from 0 to 'size' (with dummy values)
+     * Constructs an array dictionary containing keys from 0 to 'size' (with dummy values)
      */
-    public static IDictionary<Long, Long> makeDictionary(long size) {
+    public static IDictionary<Long, Long> makeArrayDictionary(long size) {
         IDictionary<Long, Long> dictionary = new ArrayDictionary<>();
         for (long i = 0; i < size; i += 1) {
             dictionary.put(i, -1L);
