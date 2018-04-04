@@ -2,15 +2,18 @@ package datastructures;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import datastructures.concrete.dictionaries.ArrayDictionary;
 import datastructures.interfaces.IDictionary;
 import misc.BaseTest;
 import misc.exceptions.NoSuchKeyException;
-import org.junit.Test;
 
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestArrayDictionary extends BaseTest {
     private IDictionary<String, String> makeBasicDictionary() {
         IDictionary<String, String> dict = new ArrayDictionary<>();

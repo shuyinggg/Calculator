@@ -8,12 +8,17 @@ import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IList;
 import misc.BaseTest;
 import misc.exceptions.EmptyContainerException;
+
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
+// This annotation makes JUnit run the tests in a consistent order - by method name.
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestDoubleLinkedList extends BaseTest {
     /**
      * This method creates a simple list containing three elements to help minimize

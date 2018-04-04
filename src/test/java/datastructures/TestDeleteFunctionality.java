@@ -1,6 +1,8 @@
 package datastructures;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,6 +18,7 @@ import static org.junit.Assert.assertTrue;
  * TestDoubleLinkedList here. In particular, you may find using the
  * 'assertListMatches' and 'makeBasicList' helper methods to be useful.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestDeleteFunctionality extends TestDoubleLinkedList {
     @Test(timeout=SECOND)
     public void testExample() {
