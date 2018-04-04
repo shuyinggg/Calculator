@@ -66,7 +66,7 @@ public class TestArrayDictionary extends BaseTest {
     public void basicTestPutUpdatesSize() {
         IDictionary<String, String> dict = new ArrayDictionary<>();
         int initSize = dict.size();
-        dict.put("keyA", "keyB");
+        dict.put("keyA", "valA");
         
         assertEquals(initSize + 1, dict.size());
     }
