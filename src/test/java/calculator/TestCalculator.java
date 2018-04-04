@@ -6,13 +6,17 @@ import calculator.interpreter.Calculator;
 import datastructures.interfaces.IList;
 import misc.BaseTest;
 import org.junit.ComparisonFailure;
+
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 
 import static org.junit.Assert.fail;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCalculator extends BaseTest {
     /**
      * The exact output of your calculator can vary if you decided to go
