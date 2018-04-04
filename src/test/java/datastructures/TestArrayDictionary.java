@@ -54,6 +54,35 @@ public class TestArrayDictionary extends BaseTest {
     }
 
     @Test(timeout=SECOND)
+    public void basicTestConstructor() {
+        IDictionary<String, String> dict = this.makeBasicDictionary();
+        this.assertDictMatches(
+                new String[] {"keyA", "keyB", "keyC"},
+                new String[] {"valA", "valB", "valC"},
+                dict);
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestPutUpdatesSize() {
+        IDictionary<String, String> dict = new ArrayDictionary<>();
+        int initSize = dict.size();
+        dict.put("keyA", "keyB");
+        
+        assertEquals(initSize + 1, dict.size());
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestPutSameKey() {
+        IDictionary<String, String> dict = new ArrayDictionary<>();
+        dict.put("a", "b");
+        int size = dict.size();
+        
+        dict.put("a", "c");
+        assertEquals(size, dict.size());
+        assertEquals("c", dict.get("a"));
+    }
+    
+    @Test(timeout=SECOND)
     public void testPutAndGetBasic() {
         IDictionary<String, String> dict = this.makeBasicDictionary();
 

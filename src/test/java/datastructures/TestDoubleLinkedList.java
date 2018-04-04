@@ -70,9 +70,56 @@ public class TestDoubleLinkedList extends BaseTest {
      */
 
     @Test(timeout=SECOND)
-    public void testAddAndGetBasic() {
+    public void basicTestAddAndGetBasic() {
         IList<String> list = makeBasicList();
         this.assertListMatches(new String[] {"a", "b", "c"}, list);
+    }
+
+    @Test(timeout=SECOND)
+    public void basicTestAddIncrementsSize() {
+        IList<String> list = makeBasicList();
+        int initSize = list.size();
+        list.add("d");
+        
+        assertEquals(initSize + 1, list.size());
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestRemoveDecrementsSize() {
+        IList<String> list = makeBasicList();
+        int initSize = list.size();
+        list.remove();
+        
+        assertEquals(initSize - 1, list.size());
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestSet() {
+        IList<String> list = makeBasicList();
+        int initSize = list.size();
+        list.set(1, "d");
+        
+        assertEquals("d", list.get(1));
+        assertEquals(initSize, list.size());
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestContains() {
+        IList<String> list = makeBasicList();
+        
+        assert(list.contains("a"));
+        assert(list.contains("b"));
+        assert(list.contains("c"));
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestIndexOf() {
+        IList<String> list = makeBasicList();
+        
+        assertEquals(0, list.indexOf("a"));
+        assertEquals(1, list.indexOf("b"));
+        assertEquals(2, list.indexOf("c"));
+        assertEquals(-1, list.indexOf("d"));
     }
 
     @Test(timeout=2 * SECOND)
