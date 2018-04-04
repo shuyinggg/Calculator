@@ -444,6 +444,7 @@ public class TestDoubleLinkedList extends BaseTest {
 
         assertEquals(2, list.indexOf(null));
         assertTrue(list.contains(null));
+        assertTrue(list.contains(4));
     }
 
     @Test(timeout=SECOND)
