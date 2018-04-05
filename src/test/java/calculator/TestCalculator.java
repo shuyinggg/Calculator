@@ -40,7 +40,31 @@ public class TestCalculator extends BaseTest {
                 Arrays.toString(options),
                 actual.toString());
     }
-
+    
+    @Test(timeout=SECOND)
+    public void basicTestToDouble() {
+        Calculator calc = new Calculator();
+        assertEquals("5", calc.evaluate("3 + 2"));
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestToSimplify() {
+        Calculator calc = new Calculator();
+        assertEquals("a + b", calc.evaluate("a + b"));
+    }
+    
+    @Test(timeout=SECOND)
+    public void basicTestSimplifyNewNode() {
+        Calculator calc = new Calculator();
+        calc.evaluate("y := x + 5"); // x+5
+        assertEquals("1", calc.evaluate("x := 1")); 
+        assertEquals("2", calc.evaluate("z := x + 1"));
+        assertEquals("6", calc.evaluate("y"));
+        
+        assertEquals("5", calc.evaluate("x := 5"));
+        assertEquals("2", calc.evaluate("z"));
+        assertEquals("10", calc.evaluate("y"));
+    }
 
     @Test(timeout=SECOND)
     public void testExample1BasicMath() {

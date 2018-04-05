@@ -6,7 +6,7 @@ import datastructures.interfaces.IDictionary;
 import misc.exceptions.NotYetImplementedException;
 
 /**
- * All of the static methods in this class are given the exact same parameters for
+ * All of the public static methods in this class are given the exact same parameters for
  * consistency. You can often ignore some of these parameters when implementing your
  * methods.
  *
@@ -42,13 +42,20 @@ public class ExpressionManipulators {
      * For example, if this method receives the AstNode corresponding to
      * 'toDouble(3 + 4)', this method should return the AstNode corresponding
      * to '7'.
+     * 
+     * This method is required to handle the following binary operations
+     *      +, -, *, /, ^
+     *  (addition, subtraction, multiplication, division, and exponentiation, respectively) 
+     * and the following unary operations
+     *      negate, sin, cos
      *
      * @throws EvaluationError  if any of the expressions contains an undefined variable.
      * @throws EvaluationError  if any of the expressions uses an unknown operation.
      */
     public static AstNode handleToDouble(Environment env, AstNode node) {
         // To help you get started, we've implemented this method for you.
-        // You should fill in the TODOs in the 'toDoubleHelper' method.
+        // You should fill in the locations specified by "your code here"
+        // in the 'toDoubleHelper' method.
         //
         // If you're not sure why we have a public method calling a private
         // recursive helper method, review your notes from CSE 143 (or the
@@ -60,7 +67,7 @@ public class ExpressionManipulators {
     }
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
-        // There are three types of nodes, so we have three cases.
+        // There are three types of nodes, so we have three cases. 
         if (node.isNumber()) {
             // TODO: your code here
             throw new NotYetImplementedException();
@@ -68,6 +75,9 @@ public class ExpressionManipulators {
             // TODO: your code here
             throw new NotYetImplementedException();
         } else {
+            // You may assume the expression node has the correct number of children.
+            // If you wish to make your code more robust, you can also use the provided
+            // "assertNodeMatches" method to verify the input is valid.
             String name = node.getName();
 
             // TODO: your code here
@@ -115,8 +125,9 @@ public class ExpressionManipulators {
     }
 
     /**
-     * Accepts a 'plot(exprToPlot, var, varMin, varMax, step)' AstNode and
-     * generates the corresponding plot. Returns some arbitrary AstNode.
+     * Accepts an Environment variable and a 'plot(exprToPlot, var, varMin, varMax, step)'
+     * AstNode and generates the corresponding plot on the ImageDrawer attached to the
+     * environment. Returns some arbitrary AstNode.
      *
      * Example 1:
      *
