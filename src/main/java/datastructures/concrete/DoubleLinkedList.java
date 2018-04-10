@@ -167,12 +167,12 @@ public class DoubleLinkedList<T> implements IList<T> {
                 item = remove();
             } else {
                 Node<T> current = new Node<T>(null);
-                if (index < this.size / 2) {//if insert near front
+                if (index < this.size / 2) {//if delete near front
                     current = this.front;
                     for (int i = 0; i < index; i++) {
                         current = current.next;
                     }
-                } else {//if insert near end
+                } else {//if delete near end
                     current = this.back;
                     for (int i = this.size - 1; i > index; i--) {
                         current = current.prev;
