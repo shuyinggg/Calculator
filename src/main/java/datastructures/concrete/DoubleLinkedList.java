@@ -1,7 +1,7 @@
 package datastructures.concrete;
 
 import datastructures.interfaces.IList;
-import misc.exceptions.NotYetImplementedException;
+import misc.exceptions.EmptyContainerException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -25,48 +25,203 @@ public class DoubleLinkedList<T> implements IList<T> {
     }
 
     @Override
+    //adds the given item at the end of the list;
     public void add(T item) {
-        throw new NotYetImplementedException();
+        if (front == null || back == null) {
+            this.front = new Node<T>(null, item, null);
+            this.back = this.front;
+        } else {
+            Node<T> current = this.back;
+            this.back = new Node<T>(null, item, null);
+            current.next = this.back;
+            this.back.prev = current;
+        }
+        this.size++; //increment size
     }
 
     @Override
+    //removes and returns the item from the end of the given list
     public T remove() {
-        throw new NotYetImplementedException();
+        if (this.front == null || this.back == null) {
+            throw new EmptyContainerException(); //empty list
+        }
+        else {
+           Node<T> removedItem = this.back;
+            this.back = this.back.prev;
+            if (this.back != null) {
+                this.back.next = null;
+                removedItem.prev = null;
+            }
+            this.size--;
+            return removedItem.data;
+            }
     }
 
     @Override
+    //returns the item at the given location
     public T get(int index) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        else {
+            Node<T> current = this.front;
+            for (int i = 0; i < index; i++) {
+                current = current.next;
+            }
+            return current.data;
+        }
     }
 
     @Override
+    //overwrites the element located at the given index with the new item
     public void set(int index, T item) {
-        throw new NotYetImplementedException();
+        if (index < 0 || this.size == 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException();
+        }
+        else {
+            if (this.size == 1) {
+               remove();
+               add(item);
+            } else {
+                Node<T> current = new Node<T>(null);
+                if (index < size / 2) {//if set near front
+                    current = this.front;
+                    for (int i = 0; i < index; i++) {
+                        current = current.next;
+                    }
+                } else {//if set near end
+                    current = this.back;
+                    for (int i = this.size - 1; i > index; i--) {
+                        current = current.prev;
+                    }  
+                }
+                Node<T> temp = new Node<T>(current.prev, item, current.next);
+                if (index == 0) {//set the front
+                    current.next.prev = temp;
+                    this.front = temp;
+                    current.next = null;
+                } else if (index == this.size - 1){ //set the end
+                    current.prev.next = temp;
+                    this.back = temp;
+                    current.prev = null;
+                    
+                } else {//set the middle
+                    current.prev.next = temp;
+                    current.next.prev = temp;
+                    current.prev = null;
+                    current.next = null;
+                }
+            }
+            
+        }
     }
 
     @Override
+    //insert a new item at the given index
     public void insert(int index, T item) {
-        throw new NotYetImplementedException();
+        if (index > this.size || index < 0) {
+            throw new IndexOutOfBoundsException();
+        } else if (index == this.size){//insert at end
+           add(item); 
+        } else {
+            Node<T> current = new Node<T>(null);
+            if (index < this.size /2) {//if insert near front
+                current = this.front;
+                for (int i = 0; i < index; i++) {
+                    current = current.next;
+                }
+            } else {//if insert near end
+                current = this.back;
+                for (int i = this.size - 1; i > index; i--) {
+                    current = current.prev;
+                }  
+            }
+            //insert
+            Node<T> temp = new Node<T>(current.prev, item, current);
+            if (current.prev == null){//insert at front
+                this.front = temp;
+                current.prev = temp;
+            } else {
+                current.prev.next = temp;
+                current.prev = temp;
+            }
+            this.size++; 
+        }
     }
 
     @Override
     public T delete(int index) {
-        throw new NotYetImplementedException();
+        if(this.size == 0) {
+            throw new EmptyContainerException();
+        }
+        else if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException();
+        } else {
+            T item = null;
+            if(index == 0 && this.size != 1) {
+                item = this.front.data;
+                this.front = this.front.next;
+                this.front.prev = null;
+                this.size--;
+            } else if(index == this.size - 1) {
+                item = remove();
+            } else {
+                Node<T> current = new Node<T>(null);
+                if (index < this.size / 2) {//if insert near front
+                    current = this.front;
+                    for (int i = 0; i < index; i++) {
+                        current = current.next;
+                    }
+                } else {//if insert near end
+                    current = this.back;
+                    for (int i = this.size - 1; i > index; i--) {
+                        current = current.prev;
+                    }  
+                }
+                item = current.data;
+                current.prev.next = current.next;
+                current.next.prev = current.prev;
+                current.prev = null;
+                current.next = null;
+                this.size--;
+            }
+            return item;
+        }
     }
 
     @Override
     public int indexOf(T item) {
-        throw new NotYetImplementedException();
-    }
+        if ((this.front == null && this.back == null) || !contains(item)) {
+            return -1;           
+        }
+        int counter = 0;
+        Node<T> current = this.front;
+        while (current.data != item && current.next != null) {
+                  current = current.next;
+                  counter++;
+        }
+        return counter;
+ }
 
     @Override
+    //returns the number of the elements in the list
     public int size() {
-        throw new NotYetImplementedException();
+        return this.size;
     }
 
     @Override
+    //whether the list contains the given element
     public boolean contains(T other) {
-        throw new NotYetImplementedException();
+        Node<T> current = this.front;
+        while (current != null) {
+            if (current.data == null) {
+                return true;
+            } else if (current.data.equals(other)){//only compares object
+                return true;
+            } 
+                current = current.next;
+            }
+        return false;
     }
 
     @Override
@@ -94,6 +249,7 @@ public class DoubleLinkedList<T> implements IList<T> {
             this(null, data, null);
         }
 
+
         // Feel free to add additional constructors or methods to this class.
     }
 
@@ -111,7 +267,7 @@ public class DoubleLinkedList<T> implements IList<T> {
          * returns 'false' otherwise.
          */
         public boolean hasNext() {
-            throw new NotYetImplementedException();
+            return current != null;
         }
 
         /**
@@ -122,7 +278,13 @@ public class DoubleLinkedList<T> implements IList<T> {
          *         there are no more elements to look at.
          */
         public T next() {
-            throw new NotYetImplementedException();
+            if (hasNext()) {
+                T item = current.data;
+                current = current.next;
+                return item;
+            } else {
+                throw new NoSuchElementException();
+            }
         }
     }
 }
