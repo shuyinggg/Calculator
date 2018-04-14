@@ -2,7 +2,6 @@ package calculator.ast;
 
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
-import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
 import misc.exceptions.NotYetImplementedException;
@@ -143,36 +142,40 @@ public class ExpressionManipulators {
 
         assertNodeMatches(node, "simplify", 1);
         AstNode exprToConvert = node.getChildren().get(0);
-        return simplifyHelper(env, node);
+        return simplifyHelper(env, exprToConvert);
     }
     
     private static AstNode simplifyHelper(Environment env, AstNode node) {
+        AstNode returnNode = node;
         if (node.isNumber()) {
-            return node;
+            returnNode = node;
         } else if (node.isVariable()) {
-            String name = node.getName();
-            return node;
+            returnNode = node;
         } else {
            String name = node.getName();
            IList<AstNode> children = node.getChildren();
            node = children.get(0);
-             if (name == "+" ) {
-                 if (children.get(0).isNumber() && children.get(1).isNumber()){ //childeren 1 & children 2 == NUM) 
-                   return new AstNode(""+children.get(0) + children.get(1), new DoubleLinkedList<>(), NUMBER);
+             if (name == "+" || name == "-" || name == "*") {
+                 if (children.get(0).isNumber() && children.get(1).isNumber()){ //children 1 & children 2 == NUM) 
+                   returnNode = handleToDouble(env, node);
                  }
-             } else if (name == "-") {
-                 if (children.get(0).isNumber() && children.get(1).isNumber())//childeren 1 & children 2 == NUM) 
-                 {
-                   return handleToDouble(env,node);
-                 }
-             } else if (name == "*") {
-                 if (children.get(0).isNumber() && children.get(1).isNumber())//childeren 1 & children 2 == NUM) 
-                 {
-                   return handleToDouble(children.get(0) + children.get(1), null);
-                 }
+             } else {
+                 returnNode = node;
              }
-          }
-
+        }
+//             } else if (name == "-") {
+//                 if (children.get(0).isNumber() && children.get(1).isNumber())//children 1 & children 2 == NUM) 
+//                 {
+//                   return handleToDouble(env,node);
+//                 }
+//             } else if (name == "*") {
+//                 if (children.get(0).isNumber() && children.get(1).isNumber())//children 1 & children 2 == NUM) 
+//                 {
+//                   return handleToDouble(children.get(0) + children.get(1), null);
+//                 }
+//             }
+//          }
+        return returnNode;
     }
 
     /**
