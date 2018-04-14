@@ -161,7 +161,7 @@ public class ExpressionManipulators {
                  }
              } else {
                  returnNode = node;
-             }
+             } //>>>
         }
 //             } else if (name == "-") {
 //                 if (children.get(0).isNumber() && children.get(1).isNumber())//children 1 & children 2 == NUM) 
