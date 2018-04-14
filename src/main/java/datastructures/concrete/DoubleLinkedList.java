@@ -84,17 +84,6 @@ public class DoubleLinkedList<T> implements IList<T> {
                add(item);
             } else {
                 Node<T> current = findNode(index);
-//                if (index < size / 2) {//if set near front
-//                    current = this.front;
-//                    for (int i = 0; i < index; i++) {
-//                        current = current.next;
-//                    }
-//                } else {//if set near end
-//                    current = this.back;
-//                    for (int i = this.size - 1; i > index; i--) {
-//                        current = current.prev;
-//                    }  
-//                }
                 Node<T> temp = new Node<T>(current.prev, item, current.next);
                 if (index == 0) {//set the front
                     current.next.prev = temp;
@@ -125,18 +114,6 @@ public class DoubleLinkedList<T> implements IList<T> {
            add(item); 
         } else {
             Node<T> current = findNode(index);
-//            Node<T> current = new Node<T>(null);
-//            if (index < this.size /2) {//if insert near front
-//                current = this.front;
-//                for (int i = 0; i < index; i++) {
-//                    current = current.next;
-//                }
-//            } else {//if insert near end
-//                current = this.back;
-//                for (int i = this.size - 1; i > index; i--) {
-//                    current = current.prev;
-//                }  
-//            }
             //insert
             Node<T> temp = new Node<T>(current.prev, item, current);
             if (current.prev == null){//insert at front
@@ -168,18 +145,6 @@ public class DoubleLinkedList<T> implements IList<T> {
                 item = remove();
             } else {
                 Node<T> current = findNode(index);
-//                Node<T> current = new Node<T>(null);
-//                if (index < this.size / 2) {//if delete near front
-//                    current = this.front;
-//                    for (int i = 0; i < index; i++) {
-//                        current = current.next;
-//                    }
-//                } else {//if delete near end
-//                    current = this.back;
-//                    for (int i = this.size - 1; i > index; i--) {
-//                        current = current.prev;
-//                    }  
-//                }
                 item = current.data;
                 current.prev.next = current.next;
                 current.next.prev = current.prev;
