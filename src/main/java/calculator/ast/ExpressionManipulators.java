@@ -70,7 +70,7 @@ public class ExpressionManipulators {
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
         // There are three types of nodes, so we have three cases. 
-        double value;
+        double value = 0;
         if (node.isNumber()) {
             value = node.getNumericValue();
         } else if (node.isVariable()) {
@@ -81,14 +81,32 @@ public class ExpressionManipulators {
             // If you wish to make your code more robust, you can also use the provided
             // "assertNodeMatches" method to verify the input is valid.
            String name = node.getName();
+           IList<AstNode> children = node.getChildren();
            if (name == "+") {
-              IList<AstNode> children = node.getChildren();
                value = toDoubleHelper(variables, children.get(0)) + toDoubleHelper(variables, children.get(1));
-           }
-            
-        }
+           } else if (name == "-") {
+               value = toDoubleHelper(variables, children.get(0)) - toDoubleHelper(variables, children.get(1));
+           } else if (name == "*") {
+               value = toDoubleHelper(variables, children.get(0)) * toDoubleHelper(variables, children.get(1));
+           } else if (name == "/") {
+               value = toDoubleHelper(variables, children.get(0)) / toDoubleHelper(variables, children.get(1));
+           } else if (name == "^") {
+               value = Math.pow(toDoubleHelper(variables, children.get(0)), toDoubleHelper(variables, children.get(1)));
+           } else if (name == "sin") {
+               value = Math.sin(toDoubleHelper(variables, children.get(0)));
+           } else if (name == "cos") {
+               value = Math.cos(toDoubleHelper(variables, children.get(0)));
+           } else if (name == "negate") {
+               value = (-1) * toDoubleHelper(variables, children.get(0));
+//           } else {
+//                throw new EvaluationError();        
+//           }
+//           
+//           }
+           }}
         return value;
-    }
+}
+
 
     /**
      * Accepts a 'simplify(inner)' AstNode and returns a new node containing the simplified version
@@ -124,9 +142,37 @@ public class ExpressionManipulators {
         //         the current level? Or before?
 
         assertNodeMatches(node, "simplify", 1);
+        AstNode exprToConvert = node.getChildren().get(0);
+        return simplifyHelper(env, node);
+    }
+    
+    private static AstNode simplifyHelper(Environment env, AstNode node) {
+        if (node.isNumber()) {
+            return node;
+        } else if (node.isVariable()) {
+            String name = node.getName();
+            return node;
+        } else {
+           String name = node.getName();
+           IList<AstNode> children = node.getChildren();
+           node = children.get(0);
+             if (name == "+" ) {
+                 if (children.get(0).isNumber() && children.get(1).isNumber()){ //childeren 1 & children 2 == NUM) 
+                   return new AstNode(""+children.get(0) + children.get(1), new DoubleLinkedList<>(), NUMBER);
+                 }
+             } else if (name == "-") {
+                 if (children.get(0).isNumber() && children.get(1).isNumber())//childeren 1 & children 2 == NUM) 
+                 {
+                   return handleToDouble(env,node);
+                 }
+             } else if (name == "*") {
+                 if (children.get(0).isNumber() && children.get(1).isNumber())//childeren 1 & children 2 == NUM) 
+                 {
+                   return handleToDouble(children.get(0) + children.get(1), null);
+                 }
+             }
+          }
 
-        
-        throw new NotYetImplementedException();
     }
 
     /**
@@ -181,4 +227,6 @@ public class ExpressionManipulators {
         //
         // return new AstNode(1);
     }
+    
+
 }
