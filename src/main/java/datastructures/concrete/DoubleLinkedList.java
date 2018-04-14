@@ -129,19 +129,19 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public T delete(int index) {
-        if(this.size == 0) {
+        if (this.size == 0) {
             throw new EmptyContainerException();
         }
         else if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
         } else {
             T item = null;
-            if(index == 0 && this.size != 1) {
+            if (index == 0 && this.size != 1) {
                 item = this.front.data;
                 this.front = this.front.next;
                 this.front.prev = null;
                 this.size--;
-            } else if(index == this.size - 1) {
+            } else if (index == this.size - 1) {
                 item = remove();
             } else {
                 Node<T> current = findNode(index);
@@ -181,7 +181,7 @@ public class DoubleLinkedList<T> implements IList<T> {
     public boolean contains(T other) {
         Node<T> current = this.front;
         while (current != null) {
-            if (current.data == null) {
+            if (current.data == null) {// null key
                 return true;
             } else if (current.data.equals(other)){//only compares object
                 return true;
@@ -220,14 +220,15 @@ public class DoubleLinkedList<T> implements IList<T> {
         // Feel free to add additional constructors or methods to this class.
     }
     
+    //if the given index is close to the end, traverse from end; or near front, from front 
     private Node<T> findNode(int index) {
         Node<T> current;
-        if (index < this.size / 2) {//if delete near front
+        if (index < this.size / 2) {// near front
             current = this.front;
             for (int i = 0; i < index; i++) {
                 current = current.next;
             }
-        } else {//if delete near end
+        } else {//near end
             current = this.back;
             for (int i = this.size - 1; i > index; i--) {
                 current = current.prev;
