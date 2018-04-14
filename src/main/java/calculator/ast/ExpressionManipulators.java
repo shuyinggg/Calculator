@@ -4,6 +4,7 @@ import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
+import datastructures.interfaces.IList;
 import misc.exceptions.NotYetImplementedException;
 
 /**
@@ -81,8 +82,8 @@ public class ExpressionManipulators {
             // "assertNodeMatches" method to verify the input is valid.
            String name = node.getName();
            if (name == "+") {
-              DoubleLinkedList<AstNode> children = node.getChildren();
-               value = toDoubleHelper(variables, children.front) + toDoubleHelper();
+              IList<AstNode> children = node.getChildren();
+               value = toDoubleHelper(variables, children.get(0)) + toDoubleHelper(variables, children.get(1));
            }
             
         }
