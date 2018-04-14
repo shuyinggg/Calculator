@@ -2,6 +2,7 @@ package calculator.ast;
 
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
+import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import misc.exceptions.NotYetImplementedException;
 
@@ -68,21 +69,24 @@ public class ExpressionManipulators {
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
         // There are three types of nodes, so we have three cases. 
+        double value;
         if (node.isNumber()) {
-            // TODO: your code here
-            throw new NotYetImplementedException();
+            value = node.getNumericValue();
         } else if (node.isVariable()) {
-            // TODO: your code here
-            throw new NotYetImplementedException();
+            String name = node.getName();
+            value = toDoubleHelper(variables,variables.get(name));
         } else {
             // You may assume the expression node has the correct number of children.
             // If you wish to make your code more robust, you can also use the provided
             // "assertNodeMatches" method to verify the input is valid.
-            String name = node.getName();
-
-            // TODO: your code here
-            throw new NotYetImplementedException();
+           String name = node.getName();
+           if (name == "+") {
+              DoubleLinkedList<AstNode> children = node.getChildren();
+               value = toDoubleHelper(variables, children.front) + toDoubleHelper();
+           }
+            
         }
+        return value;
     }
 
     /**
@@ -120,7 +124,7 @@ public class ExpressionManipulators {
 
         assertNodeMatches(node, "simplify", 1);
 
-        // TODO: Your code here
+        
         throw new NotYetImplementedException();
     }
 
@@ -162,7 +166,7 @@ public class ExpressionManipulators {
     public static AstNode plot(Environment env, AstNode node) {
         assertNodeMatches(node, "plot", 5);
 
-        // TODO: Your code here
+  
         throw new NotYetImplementedException();
 
         // Note: every single function we add MUST return an
