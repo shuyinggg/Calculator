@@ -2,9 +2,11 @@ package calculator.ast;
 
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
+import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
 import misc.exceptions.NotYetImplementedException;
+import java.lang.Math;
 
 /**
  * All of the public static methods in this class are given the exact same parameters for
@@ -69,41 +71,43 @@ public class ExpressionManipulators {
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
         // There are three types of nodes, so we have three cases. 
-        double value = 0;
         if (node.isNumber()) {
-            value = node.getNumericValue();
+            return node.getNumericValue();
         } else if (node.isVariable()) {
             String name = node.getName();
-            value = toDoubleHelper(variables,variables.get(name));
+            if (variables.containsKey(name)) {
+                return toDoubleHelper(variables, variables.get(name)); 
+            } else {
+                throw new EvaluationError("Unknown variable.");
+            }
         } else {
             // You may assume the expression node has the correct number of children.
             // If you wish to make your code more robust, you can also use the provided
             // "assertNodeMatches" method to verify the input is valid.
-           String name = node.getName();
-           IList<AstNode> children = node.getChildren();
-           if (name == "+") {
-               value = toDoubleHelper(variables, children.get(0)) + toDoubleHelper(variables, children.get(1));
-           } else if (name == "-") {
-               value = toDoubleHelper(variables, children.get(0)) - toDoubleHelper(variables, children.get(1));
-           } else if (name == "*") {
-               value = toDoubleHelper(variables, children.get(0)) * toDoubleHelper(variables, children.get(1));
-           } else if (name == "/") {
-               value = toDoubleHelper(variables, children.get(0)) / toDoubleHelper(variables, children.get(1));
-           } else if (name == "^") {
-               value = Math.pow(toDoubleHelper(variables, children.get(0)), toDoubleHelper(variables, children.get(1)));
-           } else if (name == "sin") {
-               value = Math.sin(toDoubleHelper(variables, children.get(0)));
-           } else if (name == "cos") {
-               value = Math.cos(toDoubleHelper(variables, children.get(0)));
-           } else if (name == "negate") {
-               value = (-1) * toDoubleHelper(variables, children.get(0));
-//           } else {
-//                throw new EvaluationError();        
-//           }
-//           
-//           }
-           }}
-        return value;
+            String name = node.getName();
+            IList<AstNode> children = node.getChildren();
+            if (name.equals("+")) {
+                return toDoubleHelper(variables, children.get(0)) + toDoubleHelper(variables, children.get(1));
+            } else if (name.equals("-")) {
+                return toDoubleHelper(variables, children.get(0)) - toDoubleHelper(variables, children.get(1));
+            } else if (name.equals("*")) {
+               return toDoubleHelper(variables, children.get(0)) * toDoubleHelper(variables, children.get(1));
+            } else if (name.equals("/")) {
+                return toDoubleHelper(variables, children.get(0)) / toDoubleHelper(variables, children.get(1));
+            } else if (name.equals("^")) {
+                return Math.pow(toDoubleHelper(variables, children.get(0)), 
+                        toDoubleHelper(variables, children.get(1)));
+            } else if (name.equals("sin")) {
+                return Math.sin(toDoubleHelper(variables, children.get(0)));
+            } else if (name.equals("cos")) {
+                return Math.cos(toDoubleHelper(variables, children.get(0)));
+            } else if (name.equals("negate")) {
+                return (-1) * toDoubleHelper(variables, children.get(0));
+            } else {
+                throw new EvaluationError("Unknown operation."); 
+            }
+        }
+        
 }
 
 
@@ -146,38 +150,43 @@ public class ExpressionManipulators {
     }
     
     private static AstNode simplifyHelper(Environment env, AstNode node) {
-        AstNode returnNode = node;
         if (node.isNumber()) {
-            returnNode = node;
+            return node;
         } else if (node.isVariable()) {
-            returnNode = node;
-        } else {
+            String name = node.getName();
+            IDictionary<String, AstNode> variables = env.getVariables();
+            if (variables.containsKey(name)) {
+                node = variables.get(name);
+                return simplifyHelper(env, node);
+            } else {
+                return node;
+            }
+         } else {
            String name = node.getName();
            IList<AstNode> children = node.getChildren();
-           node = children.get(0);
-             if (name == "+" || name == "-" || name == "*") {
-                 if (children.get(0).isNumber() && children.get(1).isNumber()){ //children 1 & children 2 == NUM) 
-                   returnNode = handleToDouble(env, node);
+           if (children.size() == 2) {
+               if ( (name.equals("+") || name.equals("-")  || name.equals("*")  ) &&
+                 children.get(0).isNumber() && children.get(1).isNumber()){ 
+                   IList<AstNode> passNode = new DoubleLinkedList<AstNode>();
+                   passNode.add(node);
+                   return handleToDouble(env, new AstNode("toDouble", passNode));
+                 } else { //simplify two branches and return the simplified node
+                    IList<AstNode> simplifiedNode = new DoubleLinkedList<AstNode>();
+                    simplifiedNode.add(simplifyHelper(env, children.get(0)));
+                    simplifiedNode.add(simplifyHelper(env, children.get(1)));
+                    return node = new AstNode(name, simplifiedNode);
+                    // simplified node remains the operation name with two children being simplified                                           
                  }
-             } else {
-                 returnNode = node;
-             } //>>>.....
-        }
-//             } else if (name == "-") {
-//                 if (children.get(0).isNumber() && children.get(1).isNumber())//children 1 & children 2 == NUM) 
-//                 {
-//                   return handleToDouble(env,node);
-//                 }
-//             } else if (name == "*") {
-//                 if (children.get(0).isNumber() && children.get(1).isNumber())//children 1 & children 2 == NUM) 
-//                 {
-//                   return handleToDouble(children.get(0) + children.get(1), null);
-//                 }
-//             }
-//          }
-        return returnNode;
-    }
+               
+           } else { //simplify two branches and return the simplified node
+               IList<AstNode> simplifiedNode = new DoubleLinkedList<AstNode>();
+               simplifiedNode.add(simplifyHelper(env, children.get(0)));
+               return node = new AstNode(name, simplifiedNode);
+           }
+         }
 
+
+    }
     /**
      * Accepts an Environment variable and a 'plot(exprToPlot, var, varMin, varMax, step)'
      * AstNode and generates the corresponding plot on the ImageDrawer attached to the
